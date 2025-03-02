@@ -1,0 +1,804 @@
+if not game:IsLoaded() then
+	game.Loaded:Wait()
+end
+local player = game.Players.LocalPlayer
+local HttpService = game:GetService("HttpService")
+
+
+-- myurl script : loadstring(game:HttpGet("https://i-lnw.com/roblox/Road_Rage_Simulator.lua", true))()
+if game.PlaceId == 124237744372745 then
+	local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+	local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
+	local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
+	local Window = Fluent:CreateWindow({
+		Title = "Road Rage Simulator",
+		SubTitle = "UPD|08/12/24 05:00",
+		TabWidth = 160,
+		Size = UDim2.fromOffset(580, 460),
+		Acrylic = false,
+		Theme = "Amethyst",
+		MinimizeKey = Enum.KeyCode.LeftControl
+	})
+	local a = Instance.new("ScreenGui")
+	local b = Instance.new("ImageButton")
+	local c = Instance.new("UICorner")
+	a.Name = "MobileMinimize"
+	a.Parent = game:GetService("CoreGui")
+	a.ZIndexBehavior = Enum.ZIndexBehavior.Sibling;
+	b.Parent = a;
+	b.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	b.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	b.BorderSizePixel = 0;
+	b.Position = UDim2.new(0, 584, 0, 14);
+	local originalSize = UDim2.new(0, 45, 0, 45)
+	b.Size = originalSize + UDim2.new(0, originalSize.X.Offset * 0.15, 0, originalSize.Y.Offset * 0.15)
+	b.Image = "rbxassetid://131642672159441"
+	c.CornerRadius = UDim.new(0.2, 0)
+	c.Parent = b;
+	local dragging = false;
+	local dragInput, mousePos, framePos;
+	b.InputBegan:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1 then
+			dragging = true;
+			mousePos = input.Position;
+			framePos = b.Position;
+			input.Changed:Connect(function()
+				if input.UserInputState == Enum.UserInputState.End then
+					dragging = false
+				end
+			end)
+		end
+	end)
+	b.InputChanged:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseMovement then
+			dragInput = input
+		end
+	end)
+	game:GetService("UserInputService").InputChanged:Connect(function(input)
+		if input == dragInput and dragging then
+			local delta = input.Position - mousePos;
+			b.Position = UDim2.new(framePos.X.Scale, framePos.X.Offset + delta.X, framePos.Y.Scale, framePos.Y.Offset + delta.Y)
+		end
+	end)
+	b.MouseButton1Click:Connect(function()
+		Window:Minimize()
+	end)
+    
+    -- // // // Services // // // --
+	local VirtualInputManager = game:GetService("VirtualInputManager")
+	local ReplicatedStorage = game:GetService("ReplicatedStorage")
+	local VirtualUser = game:GetService("VirtualUser")
+	local HttpService = game:GetService("HttpService")
+	local GuiService = game:GetService("GuiService")
+	local RunService = game:GetService("RunService")
+	local Workspace = game:GetService("Workspace")
+	local Players = game:GetService("Players")
+	local CoreGui = game:GetService('StarterGui')
+	local UserInputService = game:GetService('UserInputService')
+	local Remote = game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Server")
+
+    -- // // // Locals // // // --
+	local LocalPlayer = Players.LocalPlayer
+	local LocalCharacter = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+	local HumanoidRootPart = LocalCharacter:FindFirstChild("HumanoidRootPart")
+	local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+	function ShowNotification(Content, SubContent)
+		Fluent:Notify({
+			Title = "DENG HUB",
+			Content = Content,
+			SubContent = SubContent,
+			Duration = 2.5
+		})
+	end
+
+    --Fluent provides Lucide Icons https://lucide.dev/icons/ for the tabs, icons are optional
+	local Tabs = {
+		Main = Window:AddTab({
+			Title = "Main",
+			Icon = "gamepad-2"
+		}),
+		Tools = Window:AddTab({
+			Title = "Tools",
+			Icon = "wrench"
+		}),
+		Settings = Window:AddTab({
+			Title = "Settings",
+			Icon = "settings"
+		})
+	}
+	local Options = Fluent.Options
+	do -- no delete
+		ShowNotification("Road Rage Simulator Script", "Script Update 08/12/24 05:00.")
+		_G.AutoTrain = _G.AutoTrain or false
+		_G.AutoCollectOrb = _G.AutoCollectOrb or false
+		_G.AutoRebirth = _G.AutoRebirth or false
+		_G.AutoSpin = _G.AutoSpin or false
+		_G.AutoClaim = _G.AutoClaim or false
+		_G.AutoLuck = _G.AutoLuck or false
+		_G.AutoStrength = _G.AutoStrength or false
+		_G.AutoWin = _G.AutoWin or false
+		_G.AutoSpeed = _G.AutoSpeed or false
+        -- _G.UseWebhookItem = _G.UseWebhookItem or false
+        -- ===================================== Other Code =============================================
+        -- ===================================== Function ===============================================
+        -- ===================================== Function ===============================================
+        -- ===================================== Function ===============================================
+        -- ===================================== Function ===============================================
+        -- ===================================== Function ===============================================
+
+        -- ===================================== End Function ===========================================
+        -- ===================================== End Function ===========================================
+        -- ===================================== End Function ===========================================
+        -- ===================================== End Function ===========================================
+        -- ===================================== End Function ===========================================
+		local Tab_Train = Tabs.Main:AddSection("Train")
+		local Toggle_Train = Tab_Train:AddToggle("MyToggle_Train",  {
+			Title = "Auto Train",
+			Description = "",
+			Default = false,
+			Callback = function(state)
+				if state then
+					_G.AutoTrain = true
+				else
+					_G.AutoTrain = false
+				end
+			end
+		})
+		Toggle_Train:SetValue(false)
+		spawn(function()
+			while true do
+				wait(0.04)
+				if _G.AutoTrain then
+					Remote:WaitForChild("Train"):FireServer()
+					wait(0.01)
+				end
+			end
+		end)
+		local Tab_CollectOrb = Tabs.Main:AddSection("Collect Orb")
+		local Toggle_CollectOrb = Tab_CollectOrb:AddToggle("MyToggle_CollectOrb",  {
+			Title = "Auto Collect Orb",
+			Description = "",
+			Default = false,
+			Callback = function(state)
+				if state then
+					_G.AutoCollectOrb = true
+				else
+					_G.AutoCollectOrb = false
+				end
+			end
+		})
+		Toggle_CollectOrb:SetValue(false)
+		spawn(function()
+			while true do
+				wait(0.04)
+				if _G.AutoCollectOrb then
+					for _, folder in pairs(workspace.Orbs:GetChildren()) do
+						if not _G.AutoCollectOrb then
+							break
+						end
+                        -- print("Folder : " .. folder.Name)
+						for _, part in pairs(folder:GetChildren()) do
+							if not _G.AutoCollectOrb then
+								break
+							end
+							part.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+							wait(0.125)
+						end
+					end
+				end
+			end
+		end)
+		local Tab_Race = Tabs.Main:AddSection("Race")
+		local maps = {
+			"Map1",
+			"Map2",
+			"Map3",
+			"Map4",
+			"Map5",
+			"Map6",
+			"Map7",
+			"Map8"
+		}
+		local ranges = {
+			{
+				1,
+				15
+			},
+			{
+				16,
+				30
+			},
+			{
+				31,
+				45
+			},
+			{
+				46,
+				60
+			},
+			{
+				61,
+				75
+			},
+			{
+				76,
+				90
+			},
+			{
+				91,
+				105
+			},
+			{
+				106,
+				120
+			}
+		}
+
+        -- สร้าง Dropdown_race
+		local Dropdown_race = Tab_Race:AddDropdown("Dropdown_race", {
+			Title = "Select",
+			Description = "Select a map to Race",
+			Values = maps,
+			Multi = false,
+			Default = 1,
+		})
+
+        -- สร้างตัวแปรเพื่อเก็บค่าจาก Dropdown_race
+		local selectedMapIndex
+
+        -- ฟังก์ชันเมื่อ Dropdown_race เปลี่ยนค่า
+		Dropdown_race:OnChanged(function(Value)
+			for i, map in ipairs(maps) do
+				if Value == map then
+					selectedMapIndex = i
+                    -- print("Dropdown_race เปลี่ยนเป็น: ", map)
+				end
+			end
+		end)
+
+        -- สร้าง Toggle
+		local Toggle_Race = Tab_Race:AddToggle("MyToggle_Race", {
+			Title = "Auto Race",
+			Description = "",
+			Default = false,
+			Callback = function(state)
+				if state then
+					local RaceVariableName = "Race" .. selectedMapIndex
+					_G[RaceVariableName] = true
+                    -- print("Toggle เปิด ใช้แผนที่: ", maps[selectedMapIndex])
+					local start, finish = ranges[selectedMapIndex][1], ranges[selectedMapIndex][2]
+					while _G[RaceVariableName] do
+						Remote:WaitForChild("Race"):InvokeServer("Start")
+						for i = start, finish do
+							if not _G[RaceVariableName] then
+								Remote:WaitForChild("Race"):InvokeServer("End")
+								break
+							end
+							Remote:WaitForChild("Completion"):FireServer(i)
+							wait(0.01)
+						end
+						if _G[RaceVariableName] then
+							Remote:WaitForChild("Race"):InvokeServer("End")
+						end
+					end
+				else
+					local RaceVariableName = "Race" .. selectedMapIndex
+					_G[RaceVariableName] = false
+                    -- print("Toggle ปิด")
+				end
+			end
+		})
+		local Tab_Rebirth = Tabs.Main:AddSection("Rebirth")
+		local Toggle_Rebirth = Tab_Rebirth:AddToggle("MyToggle_Rebirth",  {
+			Title = "Auto Rebirth",
+			Description = "",
+			Default = false,
+			Callback = function(state)
+				if state then
+					_G.AutoRebirth = true
+				else
+					_G.AutoRebirth = false
+				end
+			end
+		})
+		Toggle_Rebirth:SetValue(false)
+		spawn(function()
+			while true do
+				wait(1)
+				if _G.AutoRebirth then
+					Remote:WaitForChild("Rebirth"):FireServer()
+				end
+			end
+		end)
+		local Tab_HatchEgg = Tabs.Main:AddSection("Hatch Egg")
+		local eggValues = {
+			["Egg 5 win"] = 1,
+			["Egg 100 win"] = 2,
+			["Egg 2.5k win"] = 3,
+			["Egg 2.5k win"] = 4,
+			["Egg 9k win"] = 5,
+			["Egg 120k win"] = 6,
+			["Egg 450k win"] = 7,
+			["Egg 1.1m win"] = 8,
+			["Egg 6m win"] = 9,
+			["Egg 16m win"] = 10,
+			["Egg 75m win"] = 11,
+			["Egg 350m win"] = 12,
+			["Egg 1.5b win"] = 13,
+			["Egg 12b win"] = 14,
+			["Egg 65b win"] = 15,
+			["Egg 175b win"] = 16,
+			["Egg 7t win"] = 17,
+			["Egg 200t win"] = 18,
+			["Egg 24qd win"] = 19,
+			["Egg 150qd win"] = 20,
+		}
+		local Dropdown_Hatch = Tab_HatchEgg:AddDropdown("Dropdown_Hatch", {
+			Title = "Select",
+			Description = "Select a Egg to Hatch",
+			Values = {
+				"Egg 5 win",
+				"Egg 100 win",
+				"Egg 2.5k win",
+				"Egg 9k win",
+				"Egg 120k win",
+				"Egg 450k win",
+				"Egg 1.1m win",
+				"Egg 6m win",
+				"Egg 16m win",
+				"Egg 75m win",
+				"Egg 350m win",
+				"Egg 1.5b win",
+				"Egg 12b win",
+				"Egg 65b win",
+				"Egg 175b win",
+				"Egg 7t win",
+				"Egg 200t win",
+				"Egg 24qd win",
+				"Egg 150qd win"
+			},
+			Multi = false,
+			Default = 1,
+		})
+		local selectedEgg
+		Dropdown_Hatch:OnChanged(function(Value)
+			selectedEgg = Value
+            -- print("ส่งคำขอฟักไข่: " .. Value)
+		end)
+		local Toggle_HatchEgg = Tab_HatchEgg:AddToggle("MyToggle_HatchEgg",  {
+			Title = "Auto Hatch Egg",
+			Description = "",
+			Default = false,
+			Callback = function(state)
+				if state then
+					_G.AutoHatchEgg = true
+				else
+					_G.AutoHatchEgg = false
+				end
+			end
+		})
+		Toggle_HatchEgg:SetValue(false)
+		spawn(function()
+			while true do
+				wait(0.15)
+				if _G.AutoHatchEgg then
+					local eggValue = eggValues[selectedEgg]
+					if eggValue then
+						Remote:WaitForChild("Hatch"):InvokeServer(eggValue, 1)
+					end
+				end
+			end
+		end)
+		local Tab_Spin = Tabs.Main:AddSection("Spin")
+		local Dropdown_Spin = Tab_Spin:AddDropdown("Dropdown_Spin", {
+			Title = "Select",
+			Description = "Select a SpinName to Spin",
+			Values = {
+				"Spin",
+				"EpicSpin",
+				"MythicSpin"
+			},
+			Multi = false,
+			Default = 1,
+		})
+		local selectedSpin
+		Dropdown_Spin:OnChanged(function(Value)
+			selectedSpin = Value
+		end)
+		local Toggle_Spin = Tab_Spin:AddToggle("MyToggle_Spin", {
+			Title = "Auto Spin",
+			Description = "",
+			Default = false,
+			Callback = function(state)
+				if state then
+					_G.AutoSpin = true
+				else
+					_G.AutoSpin = false
+				end
+			end
+		})
+		Toggle_Spin:SetValue(false)
+		spawn(function()
+			while true do
+				wait(0.15)
+				if _G.AutoSpin and selectedSpin then
+					Remote:WaitForChild("Spin"):InvokeServer(selectedSpin)
+				end
+			end
+		end)
+		local Tab_Claim = Tabs.Main:AddSection("Claim")
+		local Toggle_Claim = Tab_Claim:AddToggle("MyToggle_Claim", {
+			Title = "Auto Claim",
+			Description = "",
+			Default = false,
+			Callback = function(state)
+				if state then
+					_G.AutoClaim = true
+				else
+					_G.AutoClaim = false
+				end
+			end
+		})
+		Toggle_Claim:SetValue(false)
+		local claimIndex = 1
+		spawn(function()
+			while true do
+				wait(1)
+				if _G.AutoClaim then
+                    -- local args = {claimIndex}
+					Remote:WaitForChild("Gift"):FireServer(claimIndex)
+					claimIndex = claimIndex + 1
+					if claimIndex > 12 then
+						claimIndex = 1
+					end
+				end
+			end
+		end)
+		local Tab_Upgrade = Tabs.Main:AddSection("Upgrade")
+		local Toggle_Luck = Tab_Upgrade:AddToggle("MyToggle_Luck", {
+			Title = "Upgrade Luck",
+			Description = "",
+			Default = false,
+			Callback = function(state)
+				if state then
+					_G.AutoLuck = true
+				else
+					_G.AutoLuck = false
+				end
+			end
+		})
+        
+        -- อัพเกรดความแข็งแกร่ง
+		local Toggle_Strength = Tab_Upgrade:AddToggle("MyToggle_Strength", {
+			Title = "Upgrade Strength",
+			Description = "",
+			Default = false,
+			Callback = function(state)
+				if state then
+					_G.AutoStrength = true
+				else
+					_G.AutoStrength = false
+				end
+			end
+		})
+        
+        -- อัพเกรดโอกาสชนะ
+		local Toggle_Win = Tab_Upgrade:AddToggle("MyToggle_Win", {
+			Title = "Upgrade Win",
+			Description = "",
+			Default = false,
+			Callback = function(state)
+				if state then
+					_G.AutoWin = true
+				else
+					_G.AutoWin = false
+				end
+			end
+		})
+        
+        -- อัพเกรดความเร็ว
+		local Toggle_Speed = Tab_Upgrade:AddToggle("MyToggle_Speed", {
+			Title = "Upgrade Speed",
+			Description = "",
+			Default = false,
+			Callback = function(state)
+				if state then
+					_G.AutoSpeed = true
+				else
+					_G.AutoSpeed = false
+				end
+			end
+		})
+        
+        -- ฟังก์ชันการทำงานอัตโนมัติ
+		spawn(function()
+			while true do
+				wait(1)
+				if _G.AutoLuck then
+					Remote:WaitForChild("Upgrade"):FireServer("LuckUpgrade")
+				end
+				if _G.AutoStrength then
+					Remote:WaitForChild("Upgrade"):FireServer("StrengthUpgrade")
+				end
+				if _G.AutoWin then
+					Remote:WaitForChild("Upgrade"):FireServer("WinUpgrade")
+				end
+				if _G.AutoSpeed then
+					Remote:WaitForChild("Upgrade"):FireServer("SpeedUpgrade")
+				end
+			end
+		end)
+        -- ===================================== Other Code End =========================================
+        -- ====================================  Tools  ====================================
+		local Tools_Option = Tabs.Tools:AddSection("Option")
+		Tools_Option:AddButton({
+			Title = "White Screen Enabled ✅",
+            -- Description = "Click here to Teleport the map.",
+			Callback = function()
+				game:GetService("RunService"):Set3dRenderingEnabled(false)
+			end
+		})
+		Tools_Option:AddButton({
+			Title = "White Screen Disabled ❌",
+            -- Description = "Click here to Teleport the map.",
+			Callback = function()
+				game:GetService("RunService"):Set3dRenderingEnabled(true)
+			end
+		})
+		Tools_Option:AddButton({
+			Title = "Low VFX",
+			Callback = function()
+				workspace:FindFirstChildOfClass('Terrain').WaterWaveSize = 0
+				workspace:FindFirstChildOfClass('Terrain').WaterWaveSpeed = 0
+				workspace:FindFirstChildOfClass('Terrain').WaterReflectance = 0
+				workspace:FindFirstChildOfClass('Terrain').WaterTransparency = 0
+				game:GetService("Lighting").GlobalShadows = false
+				game:GetService("Lighting").FogEnd = 9e9
+				settings().Rendering.QualityLevel = 1
+				for i, v in pairs(workspace:GetDescendants()) do
+					if v:IsA("Part") or v:IsA("UnionOperation") or v:IsA("MeshPart") or v:IsA("CornerWedgePart") or v:IsA("TrussPart") then
+						v.Material = "Plastic"
+						v.Reflectance = 0
+					elseif v:IsA("Decal") then
+						v.Transparency = 1
+					elseif v:IsA("ParticleEmitter") or v:IsA("Trail") then
+						v.Lifetime = NumberRange.new(0)
+					elseif v:IsA("Explosion") then
+						v.BlastPressure = 1
+						v.BlastRadius = 1
+					end
+				end
+				for i, v in pairs(game:GetService("Lighting"):GetDescendants()) do
+					if v:IsA("BlurEffect") or v:IsA("SunRaysEffect") or v:IsA("ColorCorrectionEffect") or v:IsA("BloomEffect") or v:IsA("DepthOfFieldEffect") then
+						v.Enabled = false
+					end
+				end
+			end
+		})
+		Tools_Option:AddButton({
+			Title = "BoostFPS",
+			Callback = function()
+				local ToDisable = {
+					Textures = true,
+					VisualEffects = true,
+					Parts = true,
+					Particles = true,
+					Sky = true
+				}
+				local ToEnable = {
+					FullBright = false
+				}
+				local Stuff = {}
+				for _, v in next, game:GetDescendants() do
+					if ToDisable.Parts then
+						if v:IsA("Part") or v:IsA("Union") or v:IsA("BasePart") then
+							v.Material = Enum.Material.SmoothPlastic
+							table.insert(Stuff, 1, v)
+						end
+					end
+					if ToDisable.Particles then
+						if v:IsA("ParticleEmitter") or v:IsA("Smoke") or v:IsA("Explosion") or v:IsA("Sparkles") or v:IsA("Fire") then
+							v.Enabled = false
+							table.insert(Stuff, 1, v)
+						end
+					end
+					if ToDisable.VisualEffects then
+						if v:IsA("BloomEffect") or v:IsA("BlurEffect") or v:IsA("DepthOfFieldEffect") or v:IsA("SunRaysEffect") then
+							v.Enabled = false
+							table.insert(Stuff, 1, v)
+						end
+					end
+					if ToDisable.Textures then
+						if v:IsA("Decal") or v:IsA("Texture") then
+							v.Texture = ""
+							table.insert(Stuff, 1, v)
+						end
+					end
+					if ToDisable.Sky then
+						if v:IsA("Sky") then
+							v.Parent = nil
+							table.insert(Stuff, 1, v)
+						end
+					end
+				end
+				game:GetService("TestService"):Message("Effects Disabler Script : Successfully disabled " .. #Stuff .. " assets / effects. Settings :")
+				for i, v in next, ToDisable do
+					print(tostring(i) .. ": " .. tostring(v))
+				end
+				if ToEnable.FullBright then
+					local Lighting = game:GetService("Lighting")
+					Lighting.FogColor = Color3.fromRGB(255, 255, 255)
+					Lighting.FogEnd = math.huge
+					Lighting.FogStart = math.huge
+					Lighting.Ambient = Color3.fromRGB(255, 255, 255)
+					Lighting.Brightness = 5
+					Lighting.ColorShift_Bottom = Color3.fromRGB(255, 255, 255)
+					Lighting.ColorShift_Top = Color3.fromRGB(255, 255, 255)
+					Lighting.OutdoorAmbient = Color3.fromRGB(255, 255, 255)
+					Lighting.Outlines = true
+				end
+			end
+		})
+		local Tools_Tools = Tabs.Tools:AddSection("Tools")
+		Tools_Tools:AddButton({
+			Title = "Copy Position",
+			Callback = function()
+				setclipboard(tostring(game.Players.LocalPlayer.Character.HumanoidRootPart.Position))
+			end
+		})
+		local Tools_Addon = Tabs.Tools:AddSection("Addon")
+		Tools_Addon:AddButton({
+			Title = "Rejoin",
+            -- Description = "Click here to Teleport the map.",
+			Callback = function()
+				local ts = game:GetService("TeleportService")
+				local p = game.Players.LocalPlayer
+				ts:Teleport(game.PlaceId, p)
+			end
+		})
+		Tools_Addon:AddButton({
+			Title = "Hop Server",
+            -- Description = "Click here to Teleport the map.",
+			Callback = function()
+				local PlaceID = game.PlaceId
+				local AllIDs = {}
+				local foundAnything = ""
+				local actualHour = os.date("!*t").hour
+				local Deleted = false
+				function TPReturner()
+					local Site;
+					if foundAnything == "" then
+						Site = game.HttpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. PlaceID .. '/servers/Public?sortOrder=Asc&limit=100'))
+					else
+						Site = game.HttpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. PlaceID .. '/servers/Public?sortOrder=Asc&limit=100&cursor=' .. foundAnything))
+					end
+					local ID = ""
+					if Site.nextPageCursor and Site.nextPageCursor ~= "null" and Site.nextPageCursor ~= nil then
+						foundAnything = Site.nextPageCursor
+					end
+					local num = 0;
+					for i, v in pairs(Site.data) do
+						local Possible = true
+						ID = tostring(v.id)
+						if tonumber(v.maxPlayers) > tonumber(v.playing) then
+							for _, Existing in pairs(AllIDs) do
+								if num ~= 0 then
+									if ID == tostring(Existing) then
+										Possible = false
+									end
+								else
+									if tonumber(actualHour) ~= tonumber(Existing) then
+										local delFile = pcall(function()
+											delfile("NotSameServers.json")
+											AllIDs = {}
+											table.insert(AllIDs, actualHour)
+										end)
+									end
+								end
+								num = num + 1
+							end
+							if Possible == true then
+								table.insert(AllIDs, ID)
+								wait()
+								pcall(function()
+									writefile("NotSameServers.json", game:GetService('HttpService'):JSONEncode(AllIDs))
+									wait()
+									game:GetService("TeleportService"):TeleportToPlaceInstance(PlaceID, ID, game.Players.LocalPlayer)
+								end)
+								wait(4)
+							end
+						end
+					end
+				end
+				function Teleport()
+					while wait() do
+						pcall(function()
+							TPReturner()
+							if foundAnything ~= "" then
+								TPReturner()
+							end
+						end)
+					end
+				end
+				Teleport()
+			end
+		})
+		Tools_Addon:AddButton({
+			Title = "Copy JobID",
+            -- Description = "Click here to Teleport the map.",
+			Callback = function()
+				setclipboard(game.JobId)
+			end
+		})
+		local InputJobID = Tools_Addon:AddInput("InputJobID", {
+			Title = "JobID",
+			Default = "",
+			Numeric = false, -- Only allows numbers
+			Finished = true, -- Only calls callback when you press enter
+			Callback = function(Value)
+				JobIdInput = Value
+			end
+		})
+		Tools_Addon:AddButton({
+			Title = "Copy JobID",
+			Description = "Click here to Join JobID",
+			Callback = function()
+				sgame:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, JobIdInput)
+			end
+		})
+		Tools_Addon:AddButton({
+			Title = "Close UI",
+            -- Description = "Click here to Join JobID",
+			Callback = function()
+				Fluent:Destroy()
+			end
+		})
+	end
+	SaveManager:SetLibrary(Fluent)
+	InterfaceManager:SetLibrary(Fluent)
+	SaveManager:IgnoreThemeSettings()
+	SaveManager:SetIgnoreIndexes({})
+	InterfaceManager:SetFolder("DENGHUB2024")
+	SaveManager:SetFolder("DENGHUB2024/Anime-Shadow")
+	InterfaceManager:BuildInterfaceSection(Tabs.Settings)
+	SaveManager:BuildConfigSection(Tabs.Settings)
+	Window:SelectTab(1)
+
+    
+    --AnitiAFK
+	local vu = game:GetService("VirtualUser")
+	local ViSendMouseButtonEvent = game:service'VirtualInputManager'
+	game:GetService("Players").LocalPlayer.Idled:connect(function()
+		vu:Button2Down(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
+		task.wait(1)
+		vu:Button2Up(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
+	end)
+	coroutine.resume(coroutine.create(function()
+		while task.wait() do
+			pcall(function()
+				ViSendMouseButtonEvent:SendMouseButtonEvent(795, 595, 0, true, game, 1)
+				task.wait(1)
+				ViSendMouseButtonEvent:SendMouseButtonEvent(795, 595, 0, false, game, 1)
+				task.wait(1000)
+			end)
+		end
+	end))
+	game:GetService("Players").LocalPlayer.Idled:connect(function()
+		local Vector = Vector2.new(workspace.CurrentCamera.ViewportSize.X / 2, workspace.CurrentCamera.ViewportSize.Y / 2  - (game:GetService("GuiService"):GetGuiInset().Y / 2))
+		vu:Button1Down(Vector2.new(workspace.CurrentCamera.ViewportSize.X / 2, workspace.CurrentCamera.ViewportSize.Y / 2  - (game:GetService("GuiService"):GetGuiInset().Y / 2)))
+	end)
+	game.Players.LocalPlayer.AttributeChanged:Connect(function(n)
+		if n == "Idle" then
+			game.Players.LocalPlayer:SetAttribute("Idle", false)
+		end
+	end)
+    --AnitiAFK
+	Fluent:Notify({
+		Title = "DENGHUB by Adam",
+		Content = "The script has been loaded.",
+		Duration = 5
+	})
+    -- You can use the SaveManager:LoadAutoloadConfig() to load a config
+    -- which has been marked to be one that auto loads!
+	SaveManager:LoadAutoloadConfig()
+end
