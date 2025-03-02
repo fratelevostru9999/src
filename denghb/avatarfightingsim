@@ -1,0 +1,1862 @@
+if not game:IsLoaded() then
+	game.Loaded:Wait()
+end
+    -- local Remote = game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Bridge")
+local player = game.Players.LocalPlayer
+    -- // // // Services // // // --
+local VirtualInputManager = game:GetService("VirtualInputManager")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local VirtualUser = game:GetService("VirtualUser")
+local HttpService = game:GetService("HttpService")
+local GuiService = game:GetService("GuiService")
+local RunService = game:GetService("RunService")
+local Workspace = game:GetService("Workspace")
+local Players = game:GetService("Players")
+local CoreGui = game:GetService('StarterGui')
+local UserInputService = game:GetService('UserInputService')
+local TweenService = game:GetService("TweenService")
+local plr = game.Players.LocalPlayer
+local char = plr.Character or plr.CharacterAdded:Wait()
+
+    -- // // // Locals // // // --
+local LocalPlayer = Players.LocalPlayer
+local LocalCharacter = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+local HumanoidRootPart = LocalCharacter:FindFirstChild("HumanoidRootPart")
+local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+
+
+-- myurl script : loadstring(game:HttpGet("https://i-lnw.com/roblox/anime_shadow_rewrite.lua", true))()
+
+if game.PlaceId == 14025779410 then
+	local Fluent = loadstring(game:HttpGet("https://i-lnw.com/roblox/script/main.lua"))()
+	local SaveManager = loadstring(game:HttpGet("https://i-lnw.com/roblox/script/SaveManager.lua"))()
+	local InterfaceManager = loadstring(game:HttpGet("https://i-lnw.com/roblox/script/InterfaceManager.lua"))()
+	local scriptname = "[ VOID🌌] Avatar Fighting Simulator"
+	local date = "01/03/25 18:00"
+	local Window = Fluent:CreateWindow({
+		Title = scriptname,
+		SubTitle = "UPD V.1 | " .. date,
+		TabWidth = 160,
+		Size = UDim2.fromOffset(580, 460),
+		Acrylic = false,
+		Theme = "Amethyst",
+		MinimizeKey = Enum.KeyCode.LeftControl
+	})
+	local a = Instance.new("ScreenGui")
+	local b = Instance.new("ImageButton")
+	local c = Instance.new("UICorner")
+	a.Name = "MobileMinimize"
+	a.Parent = game:GetService("CoreGui")
+	a.ZIndexBehavior = Enum.ZIndexBehavior.Sibling;
+	b.Parent = a;
+	b.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	b.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	b.BorderSizePixel = 0;
+	b.Position = UDim2.new(0, 584, 0, 14);
+	local originalSize = UDim2.new(0, 45, 0, 45)
+	b.Size = originalSize + UDim2.new(0, originalSize.X.Offset * 0.15, 0, originalSize.Y.Offset * 0.15)
+	b.Image = "rbxassetid://131642672159441"
+	c.CornerRadius = UDim.new(0.2, 0)
+	c.Parent = b;
+	local dragging = false;
+	local dragInput, mousePos, framePos;
+	b.InputBegan:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1 then
+			dragging = true;
+			mousePos = input.Position;
+			framePos = b.Position;
+			input.Changed:Connect(function()
+				if input.UserInputState == Enum.UserInputState.End then
+					dragging = false
+				end
+			end)
+		end
+	end)
+	b.InputChanged:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseMovement then
+			dragInput = input
+		end
+	end)
+	game:GetService("UserInputService").InputChanged:Connect(function(input)
+		if input == dragInput and dragging then
+			local delta = input.Position - mousePos;
+			b.Position = UDim2.new(framePos.X.Scale, framePos.X.Offset + delta.X, framePos.Y.Scale, framePos.Y.Offset + delta.Y)
+		end
+	end)
+	b.MouseButton1Click:Connect(function()
+		Window:Minimize()
+	end)
+	function ShowNotification(Content, SubContent)
+		Fluent:Notify({
+			Title = "DENG HUB",
+			Content = Content,
+			SubContent = SubContent,
+			Duration = 2.5
+		})
+	end
+	local Tabs = {
+		Main = Window:AddTab({
+			Title = "Main",
+			Icon = "gamepad-2"
+		}),
+		Hatch = Window:AddTab({
+			Title = "Hatch ",
+			Icon = "gem"
+		}),
+		Misc = Window:AddTab({
+			Title = "Miscellaneous ",
+			Icon = "gem"
+		}),
+		pet_avatar = Window:AddTab({
+			Title = "Pets & Avatars ",
+			Icon = "gem"
+		}),
+		Tools = Window:AddTab({
+			Title = "Tools",
+			Icon = "wrench"
+		}),
+		Settings = Window:AddTab({
+			Title = "Settings",
+			Icon = "settings"
+		})
+	}
+	local Options = Fluent.Options
+	_G.AutoFarm = _G.AutoFarm or false
+	_G.AutoFarmCheck = _G.AutoFarmCheck or false
+	_G.AutoCollectOrb = _G.AutoCollectOrb or false
+	_G.AutoClaimRewards = _G.AutoClaimRewards or false
+    -- ✅ ตัวแปรเริ่มต้น
+	_G.AutoJoinCLEasy = _G.AutoJoinCLEasy or false
+	_G.AutoJoinCLNormal = _G.AutoJoinCLNormal or false
+	_G.AutoJoinCLHard = _G.AutoJoinCLHard or false
+	_G.ChallengeCooldown = _G.ChallengeCooldown or false
+	_G.AutoInfiniteTower = _G.AutoInfiniteTower or false
+	local checkframcleasy = false
+	local checkframclnormal = false
+	local EasyCooldown = false
+	local NormalCooldown = false
+	local HardCooldown = false
+	_G.ChallengeRunning = _G.ChallengeRunning or false
+	_G.ChallengeRunningCheck = _G.ChallengeRunningCheck or false
+	local LeaveRoom_infinityTower = nil
+	_G.AutoCraftPetGold = _G.AutoCraftPetGold or false
+	_G.AutoCraftPetRainbow = _G.AutoCraftPetRainbow or false
+	_G.AutoCraftPet = _G.AutoCraftPet or false
+	_G.AutoHatchEgg = _G.AutoHatchEgg or false
+	_G.AutoHatchEggCheck = _G.AutoHatchEggCheck or false
+	do -- no delete
+		ShowNotification(scriptname, "Script Update " .. date .. ".")
+
+        -- ============================= ลำดับงาน =============================
+		_G.DebugMode = true -- ตั้งเป็น false หากต้องการปิด debug
+		if VariableIndex == nil then
+			VariableIndex = {
+				["Infinite Tower"]  = false,
+				["Hard Challeage"]  = false,
+				["Normal Challeage"]  = false,
+				["Easy Challeage"]  = false,
+			}
+		end
+		if VariableTable == nil then
+			VariableTable = {
+				["Infinite Tower"] = 1,
+				["Hard Challeage"] = 2,
+				["Normal Challeage"] = 3,
+				["Easy Challeage"] = 4,
+			}
+		end
+		local function logDebug(message)
+			if _G.DebugMode then
+				warn(message)
+			end
+		end
+		local function GetFirstTask()
+			local minPriority = math.huge
+			local firstTask = nil
+			for key, value in pairs(VariableTable) do
+				if value < minPriority then
+					minPriority = value
+					firstTask = key
+				end
+			end
+			return firstTask
+		end
+		local Equal = function(args)
+			for key, value in pairs(VariableTable) do
+				if value < args and VariableIndex[key] == true then
+					logDebug("Equal check passed for: " .. key .. " with value: " .. value)
+					return true
+				end
+			end
+			return false
+		end
+		local jack = function(Variable, Status, Starting)
+			local GetFirstTable = GetFirstTask() -- ใช้ฟังก์ชันใหม่
+			if Status == "Get" then
+                    -- ตรวจสอบสถานะตัวแปรแรก
+				if Variable == GetFirstTable and VariableIndex[Variable] then
+					logDebug("✅ Task " .. Variable .. " is the first table and active.")
+					return true
+				end
+				if VariableIndex[GetFirstTable] then
+					logDebug("⛔ Task " .. Variable .. " is blocked because first table is active.")
+					return false
+				end
+
+                    -- ตรวจสอบลำดับก่อนหน้า
+				for i = 1, VariableTable[Variable] - 1 do
+					if Equal(i) then
+						logDebug("⛔ Task " .. Variable .. " is blocked by index " .. i)
+						return false
+					end
+				end
+				logDebug("✅ Task " .. Variable .. " is allowed to proceed.")
+				return VariableIndex[Variable] or false
+			elseif Status == "Post" then
+				VariableIndex[Variable] = Starting
+				if Starting then
+					logDebug("▶️ Task " .. Variable .. " is set to active.")
+				else
+					logDebug("✅ Task " .. Variable .. " is set to inactive.")
+				end
+			elseif Status == "Check" then
+				if VariableIndex[Variable] then
+					logDebug("🔍 Task " .. Variable .. " is currently active.")
+				else
+					logDebug("🔍 Task " .. Variable .. " is currently inactive.")
+				end
+				return VariableIndex[Variable]
+			end
+			return false
+		end
+        -- ============================= ลำดับงาน =============================
+
+        -- ฟังก์ชันในการเพิ่มเครื่องหมายคั่นพัน
+		local function formatnum(num)
+			return string.gsub(num, "(%d)(%d%d%d)$", "%1,%2")  -- ตัวอย่างการใช้เพื่อใส่คั่นพัน
+		end
+        -- ฟังก์ชันในการเพิ่มเครื่องหมายคั่นพัน
+
+        -- ===== ฟังก์ชันสำหรับส่ง Embed ไปยัง Discord Webhook =====
+		local function sendToDiscord(title, description, fields, webhookUrl, color, tags_id, useTags)
+			local Data = {
+				["username"] = "Anime Shadow | " .. player.DisplayName  .. "",
+				["avatar_url"] = "https://cdn.discordapp.com/attachments/1312405176455532568/1312489885298589757/DENGHUB.png?ex=674caef5&is=674b5d75&hm=3ffc8c4637e1e68cadcda1520a1d041eb12cf68ae8fc5f7f99188d6d36022aec&",
+                    -- ["content"] = "<@" .. tags_id .. ">",
+				["embeds"] = {
+					{
+                        -- ["title"] = title,
+						["author"] = {
+							name = title,
+							icon_url = "https://cdn.discordapp.com/attachments/1312405176455532568/1315479584237424712/noFilter_5.webp?ex=67578f55&is=67563dd5&hm=e1b127a7a94b45678500ceadb80875486ee6e5ae65662895e6a76ac11a049b41&"
+						},
+						["description"] = description,
+						["color"] = color,
+						["fields"] = fields,
+						["footer"] = {
+							text = "DENGHUB by Adam | " .. os.date("%d/%m/%Y %H:%M:%S") .. "",
+							icon_url = "https://cdn.discordapp.com/attachments/1312405176455532568/1312489885298589757/DENGHUB.png?ex=674caef5&is=674b5d75&hm=3ffc8c4637e1e68cadcda1520a1d041eb12cf68ae8fc5f7f99188d6d36022aec&"
+						}
+                        -- ["thumbnail"] = {
+                        --     ["url"] = "https://cdn.discordapp.com/attachments/1293684450810396754/1311103839360778280/noFilter.png?ex=6747a41a&is=6746529a&hm=5cee5ff5ff78d513134b000d3cd089ffb2710a5f2c5bf3e74d9b8a6865156ec1&"
+                        -- },
+                        -- ["image"] = {
+                        --     ["url"] = "https://cdn.discordapp.com/attachments/1293684450810396754/1311151209909846017/noFilter.png?ex=6747d038&is=67467eb8&hm=b7790ee47d6e919f84c6f22bc0b173b456165903d71809600f62aac2ceef391c&"
+                        -- }
+					}
+				}
+			}
+                -- เพิ่ม content เฉพาะเมื่อ tags_id ไม่เป็น nil
+			if useTags and tags_id ~= nil then
+				Data["content"] = "<@" .. tags_id .. ">"
+			end
+			local Headers = {
+				["Content-Type"] = "application/json"
+			}
+			local Encoded = HttpService:JSONEncode(Data)
+			local Request = http_request or request or HttpPost or syn.request
+			local Success, Error = pcall(function()
+				Request({
+					Url = webhookUrl,
+					Body = Encoded,
+					Method = "POST",
+					Headers = Headers
+				})
+			end)
+		end
+        -- ===== ฟังก์ชันสำหรับส่ง Embed ไปยัง Discord Webhook =====
+
+        -- ฟังก์ชันสำหรับดึงข้อมูล Rewards Defense_Rewards
+		local function getRewards()
+			local rewardsList = game:GetService("Players").LocalPlayer.PlayerGui.UI.Frames.Defense_Rewards.Frame.Background.Content.Rewards.List
+			local rewardsData = {}
+
+                -- วนลูปตรวจสอบ Frame ทั้งหมดใน Rewards List
+			for _, child in ipairs(rewardsList:GetChildren()) do
+				if child:IsA("Frame") and child:FindFirstChild("Frame") then
+					local innerFrame = child.Frame
+
+                        -- ดึงค่า Title และ Amount
+					local title = innerFrame:FindFirstChild("Title") and innerFrame.Title.Text or "N/A"
+					local amount = innerFrame:FindFirstChild("Amount") and innerFrame.Amount.Text or "N/A"
+
+                        -- เพิ่มข้อมูลเข้า table
+					table.insert(rewardsData, {
+                            -- Name = child.Name,
+						Title = title,
+						Amount = amount
+					})
+				end
+			end
+			return rewardsData
+		end
+        -- ฟังก์ชันสำหรับดึงข้อมูล Rewards Defense_Rewards
+
+        -- ฟังก์ชันสำหรับส่งข้อมูลไปยัง Discord Defense_Rewards
+		local function sendRewardsToDiscord()
+			local rewardsData = getRewards()
+			local fields = {}
+            
+                -- เตรียมข้อมูล fields สำหรับ Embed
+			local itemNormalText = ""
+			for _, data in ipairs(rewardsData) do
+				itemNormalText = itemNormalText .. data.Title .. " [" .. formatnum(data.Amount) .. "]\n"
+			end
+			table.insert(fields, {
+				name = "Rewards",
+				value = itemNormalText,
+				inline = true
+			})
+            
+                -- ตั้งค่าข้อมูลสำหรับ Embed
+			local title = "Xmas Defense Loop"
+			local description = ""
+			local color = 65280 -- สีเขียว
+            
+                -- เรียกใช้ฟังก์ชัน sendToDiscord
+			sendToDiscord(title, description, fields, whItemInput, color, nil, false)
+		end
+        -- ฟังก์ชันสำหรับส่งข้อมูลไปยัง Discord Defense_Rewards
+
+    -- ============================================= Other Code =====================================
+
+        -- ============================= CollectORB ========================================
+		spawn(function()
+			while true do
+				wait(0.25)
+				if _G.AutoCollectORB then
+					pcall(function()
+						local char = plr.Character or plr.CharacterAdded:Wait()
+						local rootPart = char:FindFirstChild("HumanoidRootPart")
+						if rootPart then
+							for _, obj in pairs(workspace:GetChildren()) do
+								if obj:IsA("Part") and obj.Name == "ORB" then
+									local tweenInfo = TweenInfo.new(0.25, Enum.EasingStyle.Linear, Enum.EasingDirection.Out)
+									local goal = {
+										Position = rootPart.Position
+									}
+									local tween = TweenService:Create(obj, tweenInfo, goal)
+									tween:Play()
+								end
+							end
+						end
+					end)
+				end
+			end
+		end)
+            
+        -- ============================= CollectORB ========================================
+
+        -- ============================= AutoFarm ========================================
+            -- ✅ หมวดหมู่: ระบบจัดลำดับพื้นที่ฟาร์ม (AREA 1 → AREA X)
+		local function GetSortedAreas()
+			local areaFolder = workspace:FindFirstChild("Area_Boxes")
+			if not areaFolder then
+				return {}
+			end
+			local areas = {}
+			for _, obj in ipairs(areaFolder:GetChildren()) do
+				if obj:IsA("Part") and obj.Name:match("AREA%s*%d+") then
+					local areaNumber = tonumber(obj.Name:match("%d+"))
+					if areaNumber then
+						table.insert(areas, {
+							Name = obj.Name,
+							Number = areaNumber,
+							CFrame = obj.CFrame
+						})
+					end
+				end
+			end
+
+                -- ✅ เรียงลำดับจากเลขน้อยไปมาก
+			table.sort(areas, function(a, b)
+				return a.Number < b.Number
+			end)
+
+                -- ✅ สร้างตารางที่มีแค่ชื่อพื้นที่
+			local sortedAreaNames = {}
+			for _, area in ipairs(areas) do
+				table.insert(sortedAreaNames, area.Name)
+			end
+			return sortedAreaNames, areas -- ✅ คืนค่าแบบมีทั้งชื่อ และข้อมูลเต็ม
+		end
+
+            -- ✅ ดึงข้อมูลพื้นที่ฟาร์ม
+		local AreaList, AreaData = GetSortedAreas()
+            -- ✅ หมวดหมู่: ระบบ Auto Farm
+		local Toggle_AutoFarm = Tabs.Main:AddToggle("MyToggle_AutoFarm", {
+			Title = "Auto Farm",
+			Default = false
+		})
+		Toggle_AutoFarm:OnChanged(function()
+			_G.AutoFarm = Toggle_AutoFarm.Value
+			_G.AutoFarmCheck = Toggle_AutoFarm.Value
+		end)
+		Options.MyToggle_AutoFarm:SetValue(false)
+		local Toggle_AutoCollectORB = Tabs.Main:AddToggle("MyToggle_AutoCollectORB", {
+			Title = "Auto Collect ORB",
+			Default = false
+		})
+		Toggle_AutoCollectORB:OnChanged(function()
+			_G.AutoCollectORB = Toggle_AutoCollectORB.Value
+		end)
+		Options.MyToggle_AutoCollectORB:SetValue(false)
+
+            -- ✅ Dropdown เลือกพื้นที่ฟาร์ม
+		local Dropdown_MapMon = Tabs.Main:AddDropdown("Dropdown_MapMon", {
+			Title = "Select Area Farm",
+			Description = "Select Area to Farm",
+			Values = AreaList,
+			Multi = false,
+			Default = 1,
+		})
+		Dropdown_MapMon:SetValue(AreaList[1] or "AREA 1")
+		Dropdown_MapMon:OnChanged(function(Value)
+			MapMonNameTP = Value:gsub(" ", "_") -- แปลงชื่อให้ไม่มีช่องว่าง
+			MapMonName = Value
+
+                -- ✅ ค้นหา CFrame ที่ตรงกับชื่อพื้นที่
+			local targetCFrame = nil
+			for _, area in ipairs(AreaData) do
+				if area.Name == Value then
+					targetCFrame = area.CFrame
+					break
+				end
+			end
+
+                -- ✅ ส่งค่าไปยัง TELEPORT
+			if targetCFrame then
+				local player = game.Players.LocalPlayer
+				if player and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+					player.Character.HumanoidRootPart.CFrame = targetCFrame * CFrame.new(0, 2, 0)
+				end
+			end
+		end)
+
+            -- ✅ หมวดหมู่: การตั้งค่าการล่าศัตรู
+		local SortOrder = "HP High to Low"
+		local Dropdown_SortOrder = Tabs.Main:AddDropdown("Dropdown_SortOrder", {
+			Title = "Sort Enemy by HP",
+			Description = "Choose how to target enemies",
+			Values = {
+				"HP High to Low",
+				"HP Low to High"
+			},
+			Multi = false,
+			Default = 1,
+		})
+		Dropdown_SortOrder:SetValue("HP High to Low")
+		Dropdown_SortOrder:OnChanged(function(Value)
+			SortOrder = Value
+		end)
+
+            -- ✅ Dropdown เลือก Monster ที่ต้องการฟาร์ม
+		local Dropdown_MonsterList = Tabs.Main:AddDropdown("Dropdown_MonsterList", {
+			Title = "Select Monsters",
+			Description = "Choose which monsters to farm",
+			Values = {},
+			Multi = true,
+		})
+		Dropdown_MonsterList:SetValue({})
+		local function RefreshMonsterList()
+			local Get_Island = workspace.Enemies[MapMonName]
+			if not Get_Island then
+				return
+			end
+			local monsterNames = {}
+			for _, v in pairs(Get_Island:GetChildren()) do
+				if v.Parent and not table.find(monsterNames, v.Name) then
+					table.insert(monsterNames, v.Name)
+				end
+			end
+			if Dropdown_MonsterList then
+				Dropdown_MonsterList:SetValues(monsterNames)
+			end
+		end
+		Tabs.Main:AddButton({
+			Title = "🔄 Refresh Monster List",
+			Callback = RefreshMonsterList
+		})
+		task.spawn(function()
+			repeat
+				wait()
+			until Dropdown_MonsterList
+			Dropdown_MonsterList:OnChanged(function(Value)
+				SelectedMonsters = Value
+			end)
+		end)
+
+            -- ✅ ฟังก์ชันสำหรับวาร์ปไปยังพื้นที่ฟาร์ม
+		local function TeleportToFarmArea()
+			local player = game.Players.LocalPlayer
+			if player and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+				local char = player.Character
+				local rootPart = char.HumanoidRootPart
+
+                    -- ✅ ค้นหา CFrame ของพื้นที่ฟาร์มที่เลือก
+				local targetCFrame = nil
+				for _, area in ipairs(AreaData) do
+					if area.Name == MapMonName then
+						targetCFrame = area.CFrame
+						break
+					end
+				end
+
+                    -- ✅ ตรวจสอบระยะห่างก่อนวาร์ป
+				if targetCFrame then
+					local distance = (rootPart.Position - targetCFrame.Position).Magnitude
+					if distance > 100 then
+						rootPart.CFrame = targetCFrame * CFrame.new(0, 2, 0)
+					end
+				end
+			end
+		end
+
+            -- ✅ แก้ไขระบบ AutoFarm ให้รวมการวาร์ปพื้นที่
+		spawn(function()
+			while true do
+				wait(0.15)
+				if _G.AutoFarm and _G.AutoFarmCheck then
+					pcall(function()
+						local plr = game.Players.LocalPlayer
+						local char = plr.Character or plr.CharacterAdded:Wait()
+						local Get_Island = workspace.Enemies[MapMonName]
+						if not Get_Island then
+							return
+						end
+
+                            -- ✅ วาร์ปไปพื้นที่ฟาร์มหากจำเป็น
+						TeleportToFarmArea()
+
+                            -- ✅ ดึงข้อมูลจาก UI
+						local selectedMonsters = {}
+						if typeof(Dropdown_MonsterList.Value) == "table" then
+							for name, selected in pairs(Dropdown_MonsterList.Value) do
+								if selected then
+									table.insert(selectedMonsters, name)
+								end
+							end
+						end
+
+                            -- ✅ กรองเฉพาะมอนสเตอร์ที่ถูกเลือก
+						local filteredMonsters = {}
+						for _, v in pairs(Get_Island:GetChildren()) do
+							if table.find(selectedMonsters, v.Name) then
+								table.insert(filteredMonsters, v)
+							end
+						end
+
+                            -- ✅ กรองเฉพาะมอนสเตอร์ที่มี HP มากกว่า 1
+						local enemies = {}
+						for _, v in pairs(filteredMonsters) do
+							if v.Parent and v:GetAttribute("Health") and v:GetAttribute("Health") >= 1 then
+								table.insert(enemies, {
+									Enemy = v,
+									Health = v:GetAttribute("Health")
+								})
+							end
+						end
+
+                            -- ✅ เรียงลำดับตาม HP
+						if SortOrder == "HP High to Low" then
+							table.sort(enemies, function(a, b)
+								return a.Health > b.Health
+							end)
+						elseif SortOrder == "HP Low to High" then
+							table.sort(enemies, function(a, b)
+								return a.Health < b.Health
+							end)
+						end
+
+                            -- ✅ เลือกศัตรูตัวแรกที่ผ่านเงื่อนไขทั้งหมด
+						local targetEnemy = enemies[1] and enemies[1].Enemy or nil
+
+                            -- ✅ ถ้ามีศัตรูเป้าหมาย
+						if targetEnemy then
+							repeat
+								if targetEnemy and targetEnemy.Parent then
+									local targetPosition = targetEnemy:GetPivot().Position
+									if (char.HumanoidRootPart.Position - targetPosition).Magnitude >= 15 then
+										char.HumanoidRootPart.CFrame = CFrame.new(targetPosition) * CFrame.new(2, 2, 2)
+									end
+								end
+								wait(0.25)
+							until not targetEnemy or not targetEnemy.Parent or targetEnemy:GetAttribute("Health") <= 0 or not _G.AutoFarm
+						end
+					end)
+				end
+			end
+		end)
+
+        -- ============================= AutoFarm ========================================
+        
+        -- ============================= Hatch Eggs =========================================
+            -- local Challengesm = Tabs.Main:AddSection("")
+            -- ✅ ฟังก์ชันดึงข้อมูลไข่จากโฟลเดอร์ Eggs และเรียงลำดับ
+		local function GetSortedEggsCostData()
+			local EggFolder = workspace:FindFirstChild("Eggs")
+			if not EggFolder then
+				warn("⚠️ ไม่พบโฟลเดอร์ Eggs!")
+				return {}
+			end
+			local eggData = {}
+			for _, folder in ipairs(EggFolder:GetChildren()) do
+				if folder:IsA("Folder") and folder.Name:match("AREA%s*%d+") then
+					local areaNumber = tonumber(folder.Name:match("%d+"))
+					local costPart = folder:FindFirstChild("Cost")
+					if areaNumber and costPart and costPart:IsA("Part") then
+						table.insert(eggData, {
+							Name = folder.Name,
+							Number = areaNumber,
+							CFrame = costPart.CFrame
+						})
+					end
+				end
+			end
+
+                -- ✅ เรียงลำดับจาก AREA 1 → AREA X
+			table.sort(eggData, function(a, b)
+				return a.Number < b.Number
+			end)
+			return eggData
+		end
+
+            -- ✅ ดึงข้อมูลใหม่
+		local SortedEggCosts = GetSortedEggsCostData()
+
+            -- ✅ สร้างรายการชื่อพื้นที่ฟาร์มไข่
+		local EggAreaNames = {}
+		for _, data in ipairs(SortedEggCosts) do
+			table.insert(EggAreaNames, data.Name)
+		end
+
+            -- ✅ สร้าง Dropdown เลือกพื้นที่เปิดไข่
+		local Dropdown_EggAreas = Tabs.Hatch:AddDropdown("Dropdown_EggAreas", {
+			Title = "Select Egg Area",
+			Description = "Choose an area to teleport and hatch eggs",
+			Values = EggAreaNames,
+			Multi = false,
+			Default = 1,
+		})
+
+            -- ✅ ตั้งค่าเริ่มต้นให้ Dropdown
+		Dropdown_EggAreas:SetValue("AREA 1")
+
+            -- ✅ สร้าง Toggle สำหรับเปิดไข่อัตโนมัติ
+		local Toggle_AutoHatchEgg = Tabs.Hatch:AddToggle("Toggle_AutoHatchEgg", {
+			Title = "🥚 Auto Hatch Egg",
+			Default = false
+		})
+
+            -- ✅ ตั้งค่าการเปิด/ปิด Auto Hatch
+		Toggle_AutoHatchEgg:OnChanged(function()
+			_G.AutoHatchEgg = Toggle_AutoHatchEgg.Value
+			_G.AutoHatchEggCheck = Toggle_AutoHatchEgg.Value
+		end)
+
+            -- ✅ ตัวแปรติดตามการเปิดไข่ (ป้องกันการเปิดซ้ำ)
+		local lastHatchedArea = nil
+
+            -- ✅ ลูปเปิดไข่อัตโนมัติ
+		spawn(function()
+			while true do
+				wait(0.25) -- ⏳ รอ 1.5 วินาที เพื่อลดภาระเซิร์ฟเวอร์
+				if _G.AutoHatchEgg and _G.AutoHatchEggCheck then
+					local selectedArea = Dropdown_EggAreas.Value
+					local SortedEggCosts = GetSortedEggsCostData()
+					for _, data in ipairs(SortedEggCosts) do
+						if data.Name == selectedArea then
+                                -- ✅ ตรวจสอบว่าผู้เล่นมี Character และ HumanoidRootPart ก่อนทำงาน
+							local player = game.Players.LocalPlayer
+							local char = player and player.Character
+							local rootPart = char and char:FindFirstChild("HumanoidRootPart")
+							if rootPart then
+								local distance = (rootPart.Position - data.CFrame.Position).Magnitude
+
+                                    -- ✅ ถ้าอยู่ใกล้กว่า 5 → ไม่ต้อง TP
+								if distance > 10 then
+									rootPart.CFrame = data.CFrame * CFrame.new(0, 2, 0)
+                                        -- print("🚀 เทเลพอร์ตไปที่:", data.Name, "| CFrame:", data.CFrame)
+								end
+							end
+                                -- ✅ ส่งคำขอเปิดไข่ไปยังเซิร์ฟเวอร์
+							local args = {
+								[1] = data.Name, -- ชื่อโซนที่เลือก เช่น "AREA 12"
+								[2] = "F"        -- ประเภทการเปิดไข่ (อาจต้องเปลี่ยนตามระบบเกม)
+							}
+							game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("HatchEgg"):FireServer(unpack(args))
+						end
+					end
+				end
+			end
+		end)
+
+
+
+        -- ============================= Hatch Eggs =========================================
+
+        -- ============================= Infinity Tower ========================================
+		local infTowerMU = Tabs.Main:AddSection("Infinite Tower")
+
+            -- ✅ Input สำหรับกำหนด Wave ที่ต้องการออกจาก Infinite Tower
+		local InputLeaveinfinityTower = infTowerMU:AddInput("InputLeaveinfinityTower", {
+			Title = "Leave Room",
+			Description = "Please specify the wave number to leave.",
+			Default = "Wave 25",
+			Placeholder = "Wave 1 , Wave 30",
+			Numeric = false,
+			Finished = true,
+			Callback = function(Value)
+				LeaveRoom_infinityTower = Value
+				ShowNotification("Exit Infinity Tower at", LeaveRoom_infinityTower)
+			end
+		})
+		InputLeaveinfinityTower:SetValue("Wave 25")
+            
+            -- ✅ ตรวจสอบว่าอยู่ใน Infinite Tower หรือไม่
+		local function IsTowerGuiEnabled()
+			local playerGui = game:GetService("Players").LocalPlayer.PlayerGui
+			local towerGui = playerGui:FindFirstChild("Tower")
+			return towerGui and towerGui.Enabled
+		end
+            
+            -- ✅ ตรวจสอบว่า Infinite Tower เปิดอยู่หรือไม่
+		local function IsInfiniteTowerOpen()
+			local InfiniteTower = workspace:FindFirstChild("Towers") and workspace.Towers:FindFirstChild("Infinite Tower")
+			local Door = InfiniteTower and InfiniteTower:FindFirstChild("Gate") and InfiniteTower.Gate:FindFirstChild("Door")
+			if Door then
+				local isOpen = Door:GetAttribute("OPEN") == true
+                    -- print("🔍 [DEBUG] ตรวจสอบ Infinite Tower: ", isOpen and "เปิดอยู่" or "ปิดอยู่")
+				return isOpen
+			end
+			return false
+		end
+            -- ✅ ฟังก์ชันเช็คตำแหน่งผู้เล่น
+		function IsPlayerInPositionTower(center, range)
+			local root = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+			return root and (root.Position - center).Magnitude <= range
+		end
+            
+            -- ✅ ฟังก์ชันออกจาก Challenge ทันที
+		local function ExitChallenge()
+			local player = game:GetService("Players").LocalPlayer
+			local towerGui = player.PlayerGui:FindFirstChild("Tower")
+			if towerGui and towerGui.Enabled then
+                    -- print("⚠️ กดปุ่มกดออกจาก Challeange หรือ กดเพื่อออก เมื่อถึง Wave ที่กำหนด")
+				local exitButton = player.PlayerGui.Tower.Info:FindFirstChild("Exit")
+				if exitButton then
+					for _, event in pairs({
+						"MouseButton1Click",
+						"MouseButton1Down",
+						"Activated"
+					}) do
+						for _, btn in pairs(getconnections(exitButton[event])) do
+							btn.Function()
+						end
+					end
+				end
+				wait(1)
+			end
+		end
+            
+            -- ✅ ฟังก์ชันฟาร์มใน Infinite Tower
+		spawn(function()
+			while true do
+				wait(0.125)
+				if _G.AutoInfiniteTower then
+					if IsTowerGuiEnabled() then
+						local ChallengeFolder = workspace.Towers:FindFirstChild("Infinite Tower")
+						if not ChallengeFolder or not ChallengeFolder:FindFirstChild("Enemies") then
+							wait(1)
+							continue
+						end
+						local EnemiesFolder = ChallengeFolder:FindFirstChild("Enemies")
+						local Player = game.Players.LocalPlayer
+						local Char = Player.Character or Player.CharacterAdded:Wait()
+						local RootPart = Char and Char:FindFirstChild("HumanoidRootPart")
+						if not RootPart then
+							wait(1)
+							continue
+						end
+						local Enemies = {}
+						for _, Folder in pairs(EnemiesFolder:GetChildren()) do
+							if Folder:IsA("Folder") then
+								for _, Enemy in pairs(Folder:GetChildren()) do
+									if Enemy:IsA("Model") and Enemy:FindFirstChild("HumanoidRootPart") then
+										table.insert(Enemies, Enemy)
+									end
+								end
+							end
+						end
+						if #Enemies == 0 then
+							wait(1)
+							continue
+						end
+						table.sort(Enemies, function(a, b)
+							return (RootPart.Position - a.HumanoidRootPart.Position).Magnitude <
+                                    (RootPart.Position - b.HumanoidRootPart.Position).Magnitude
+						end)
+						for _, Enemy in ipairs(Enemies) do
+							if _G.AutoInfiniteTower and Enemy and Enemy.Parent then
+								local TargetPos = Enemy.HumanoidRootPart.Position
+								RootPart.CFrame = CFrame.new(TargetPos) * CFrame.new(4, 5, 4)
+								while _G.AutoInfiniteTower and Enemy and Enemy.Parent and Enemy:GetAttribute("Health") > 0 do
+									wait(0.2)
+								end
+							end
+						end
+					end
+				end
+			end
+		end)
+            
+            -- ✅ Toggle สำหรับ Auto Farm ใน Infinite Tower
+		local Toggle_AutoInfiniteTower = infTowerMU:AddToggle("MyToggle_AutoInfiniteTower", {
+			Title = "Auto Farm",
+			Default = false
+		})
+		Toggle_AutoInfiniteTower:OnChanged(function()
+			_G.AutoInfiniteTower = Toggle_AutoInfiniteTower.Value
+		end)
+		Toggle_AutoInfiniteTower:SetValue(false)
+            
+            -- ✅ ฟังก์ชันเข้า Infinite Tower เมื่อเปิด
+		spawn(function()
+			while true do
+				wait(1)
+				if _G.AutoJoinInfiniteTower and IsInfiniteTowerOpen() then
+                        -- print("🔷 Infinite Tower เปิด → ออกจาก Challenge และเข้าสู่ Infinite Tower")
+					if _G.ChallengeRunningCheck then
+						_G.ChallengeRunning = false
+					end
+					if _G.AutoFarmCheck then
+						_G.AutoFarm = false
+					end
+					if _G.AutoHatchEggCheck then
+						_G.AutoHatchEgg = false
+					end
+					ExitChallenge() -- ✅ ออกจาก Challenge ก่อนเข้า Infinite Tower
+
+                        -- ✅ วาร์ปเข้าสู่ Infinite Tower
+					local player = game:GetService("Players").LocalPlayer
+					local humanoidRoot = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+					local inftowpos = Vector3.new(-466.68, 244.44, -542.66)
+
+                        -- ✅ ตรวจสอบว่าผู้เล่นอยู่ที่จุดวาร์ปแล้วหรือไม่
+					if humanoidRoot and (humanoidRoot.Position - inftowpos).Magnitude > 8 then
+						humanoidRoot.CFrame = CFrame.new(inftowpos)
+					end
+					wait(2)
+				end
+			end
+		end)
+            
+            -- ✅ ฟังก์ชันออกจาก Infinite Tower เมื่อถึง Wave ที่กำหนด
+		spawn(function()
+			while true do
+				wait(0.125)
+				if _G.AutoJoinInfiniteTower then
+					local player = game:GetService("Players").LocalPlayer
+					local towerGui = player.PlayerGui:FindFirstChild("Tower")
+					if towerGui and towerGui.Enabled then
+						local waveText = player.PlayerGui.Tower.Info.Wave.Wave.Text
+						if tostring(waveText) == tostring(LeaveRoom_infinityTower) then
+                                -- print("⚠️ ถึง Wave ที่กำหนด → ออกจาก Infinite Tower")
+							ExitChallenge()
+							wait(1)
+
+                                -- ✅ รีเซ็ตค่า Challenge และ AutoFarm หลังจากออกจาก Infinite Tower
+							HardCooldown = false
+							NormalCooldown = false
+							EasyCooldown = false
+							if _G.ChallengeRunningCheck then
+								_G.ChallengeRunning = true
+							end
+							if _G.AutoFarmCheck then
+								_G.AutoFarm = true
+							end
+							if _G.AutoHatchEggCheck then
+								_G.AutoHatchEgg = true
+							end
+						end
+					end
+
+                        -- ✅ กด OK เมื่อจบ Challenge
+					local challengeGui = player.PlayerGui.UIS:FindFirstChild("ChallengesFinished")
+					if not (towerGui and towerGui.Enabled) and challengeGui and challengeGui.Visible then
+                            -- print("✅ กด OK ปิด Reward UI Infinite Tower")
+						local okButton = challengeGui:FindFirstChild("Ok")
+						if okButton then
+							for _, event in pairs({
+								"MouseButton1Click",
+								"MouseButton1Down",
+								"Activated"
+							}) do
+								for _, btn in pairs(getconnections(okButton[event])) do
+									btn.Function()
+								end
+							end
+						end
+					end
+				end
+			end
+		end)
+            
+            -- ✅ Toggle สำหรับ Auto Join | Leave Infinite Tower
+		local Toggle_AutoJoinInfiniteTower = infTowerMU:AddToggle("MyToggle_AutoJoinInfiniteTower", {
+			Title = "Auto Join | Leave",
+			Default = false
+		})
+		Toggle_AutoJoinInfiniteTower:OnChanged(function()
+			_G.AutoJoinInfiniteTower = Toggle_AutoJoinInfiniteTower.Value
+		end)
+		Toggle_AutoJoinInfiniteTower:SetValue(false)
+        
+        -- ============================= Infinity Tower ========================================
+
+        -- ============================= Auto Challenge ========================================
+            
+            -- ✅ ฟังก์ชันเช็คว่าอยู่ใน Challenge แล้วหรือยัง
+		function IsInChallenge()
+			return game:GetService("Players").LocalPlayer.PlayerGui.Tower.Enabled
+		end
+            -- ✅ ฟังก์ชันเช็คตำแหน่งผู้เล่น
+		function IsPlayerInPosition(center, range)
+			local root = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+			return root and (root.Position - center).Magnitude <= range
+		end
+            -- ✅ ฟังก์ชันกดปุ่ม OK เมื่อคูลดาวน์
+		function ClickOkButton()
+			local playerGui = game:GetService("Players").LocalPlayer:FindFirstChild("PlayerGui")
+			if not playerGui then
+				return
+			end
+			local uiMessage = playerGui:FindFirstChild("UIS") and playerGui.UIS:FindFirstChild("Message")
+			if uiMessage and uiMessage.Visible then
+				local okButton = uiMessage:FindFirstChild("Ok")
+				if okButton then
+					for _, btnEvent in pairs({
+						"MouseButton1Click",
+						"MouseButton1Down",
+						"Activated"
+					}) do
+						for _, connection in pairs(getconnections(okButton[btnEvent])) do
+							connection.Function()
+						end
+					end
+					wait(1) -- ✅ รอให้ปิดหน้าต่างก่อนทำงานต่อ
+				end
+			end
+		end
+
+            -- ✅ ฟังก์ชันโจมตีศัตรู
+		function AutoAttack(ChallengeFolder, humanoidRoot, autoJoinFlag)
+			local EnemiesFolder = ChallengeFolder:FindFirstChild("Enemies")
+			local Enemies = {}
+			for _, Folder in pairs(EnemiesFolder:GetChildren()) do
+				if Folder:IsA("Folder") then
+					for _, Enemy in pairs(Folder:GetChildren()) do
+						if Enemy:IsA("Model") and Enemy:FindFirstChild("HumanoidRootPart") then
+							table.insert(Enemies, Enemy)
+						end
+					end
+				end
+			end
+
+                -- ถ้าไม่มีศัตรู -> รอให้ศัตรูเกิดใหม่
+			if #Enemies == 0 then
+				return
+			end
+
+                -- เรียงลำดับศัตรูตามระยะห่างจากผู้เล่น
+			table.sort(Enemies, function(a, b)
+				return (humanoidRoot.Position - a.HumanoidRootPart.Position).Magnitude <
+                        (humanoidRoot.Position - b.HumanoidRootPart.Position).Magnitude
+			end)
+
+                -- วาร์ปไปโจมตีศัตรูทั้งหมดในลูป
+			for _, Enemy in ipairs(Enemies) do
+				if autoJoinFlag and Enemy and Enemy.Parent then
+					local TargetPos = Enemy.HumanoidRootPart.Position
+					humanoidRoot.CFrame = CFrame.new(TargetPos) * CFrame.new(5, 5, 5)
+
+                        -- ตรวจสอบซ้ำทุก 0.3 วิ จนกว่าศัตรูจะตาย
+					while autoJoinFlag and Enemy and Enemy.Parent and Enemy:GetAttribute("Health") > 0 do
+						wait(0.25)
+					end
+				end
+			end
+		end
+            -- ✅ ฟังก์ชันเข้า Challenge (Easy, Normal, Hard)
+		function AutoJoinChallenge(name, position, cooldownVar, autoJoinFlag)
+			local player = game:GetService("Players").LocalPlayer
+			local humanoidRoot = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+			if IsInChallenge() then
+				return
+			end
+			if _G.ChallengeRunningCheck then
+				_G.ChallengeRunning = false
+			end
+                -- print("⚔️ กำลังเข้าสู่ " .. name .. " Challenge...")
+
+                -- ✅ วาร์ปไปทางเข้า Challenge
+			if not IsPlayerInPosition(position, 5) then
+                    -- print("🚀 วาร์ปไปทางเข้า " .. name .. " Challenge")
+				humanoidRoot.CFrame = CFrame.new(position)
+				wait(2)  -- ✅ รอให้โหลด UI
+			end
+
+                -- ✅ ตรวจสอบว่ามีปุ่ม OK คูลดาวน์หรือไม่
+			if player.PlayerGui.UIS.Message.Visible then
+				ClickOkButton()
+				_G[cooldownVar] = true -- ✅ ตั้งคูลดาวน์
+				if _G.ChallengeRunningCheck then
+					_G.ChallengeRunning = true
+				end
+                    -- print("🚫 " .. name .. " Challenge ติดคูลดาวน์")
+				return
+			end
+
+                -- ✅ Challenge ไม่ติดคูลดาวน์ → เข้าสู่ Challenge
+			wait(15)
+			while IsInChallenge() do
+				local ChallengeFolder = workspace.Towers:FindFirstChild(name .. " Challenge")
+				if ChallengeFolder and ChallengeFolder:FindFirstChild("Enemies") then
+					AutoAttack(ChallengeFolder, humanoidRoot, autoJoinFlag)
+				end
+				wait(0.125)
+
+                    -- ✅ ตรวจสอบว่า UI Challenge หายไปหรือยัง
+				local playerGui = game:GetService("Players").LocalPlayer.PlayerGui
+				if not playerGui:FindFirstChild("Tower") or not playerGui.Tower.Enabled then
+                        -- ✅ Debugging เช็คค่าก่อนและหลังการตั้งคูลดาวน์
+					_G[cooldownVar] = true -- ✅ Challenge เสร็จแล้ว → ตั้งคูลดาวน์
+					wait(2)
+					break
+				end
+			end
+			if _G.ChallengeRunningCheck then
+				_G.ChallengeRunning = true
+			end
+                -- print("✅ " .. name .. " Challenge ทำงานเสร็จสิ้น! รีเซ็ตและตรวจสอบ Challenge อื่น")
+		end
+            -- ✅ ฟังก์ชันดึงลำดับความสำคัญของ Challenge **(อัปเดตให้ทำงานใหม่)**
+		function GetChallengePriorityList()
+			local challengeOrder = {}
+            
+                -- ✅ รีโหลดค่าใหม่หลังจากจบ Challenge
+			_G.HardCooldown = _G.HardCooldown or false
+			_G.NormalCooldown = _G.NormalCooldown or false
+			_G.EasyCooldown = _G.EasyCooldown or false
+			if _G.AutoJoinCLHard and not _G.HardCooldown then
+				table.insert(challengeOrder, {
+					name = "Hard",
+					func = AutoJoinChallenge,
+					position = Vector3.new(-510.53, 231.41, -405.16),
+					cooldown = "HardCooldown",
+					autoFlag = _G.AutoJoinCLHard
+				})
+			end
+			if _G.AutoJoinCLNormal and not _G.NormalCooldown then
+				table.insert(challengeOrder, {
+					name = "Normal",
+					func = AutoJoinChallenge,
+					position = Vector3.new(-510.53, 231.41, -405.16),
+					cooldown = "NormalCooldown",
+					autoFlag = _G.AutoJoinCLNormal
+				})
+			end
+			if _G.AutoJoinCLEasy and not _G.EasyCooldown then
+				table.insert(challengeOrder, {
+					name = "Easy",
+					func = AutoJoinChallenge,
+					position = Vector3.new(-510.60, 231.41, -364.90),
+					cooldown = "EasyCooldown",
+					autoFlag = _G.AutoJoinCLEasy
+				})
+			end
+            
+                -- print("🔄 [DEBUG] Challenge Order Loaded:", challengeOrder)
+			return challengeOrder
+		end
+            -- ✅ ฟังก์ชันลูป Challenge **(แก้ไขให้รีเซ็ตคูลดาวน์สำเร็จ)**
+		spawn(function()
+			while true do
+				if _G.ChallengeRunningCheck then
+					if not _G.ChallengeRunning then
+                            -- print("🚫 Challenge ถูกปิด -> หยุดทุกกระบวนการ")
+						wait(1)
+						continue
+					end
+    
+                        -- print("🚀 เริ่มตรวจสอบ Challenge ตามลำดับความสำคัญ...")
+    
+                        -- ✅ หยุด AutoFarm ก่อนเข้า Challenge
+					if _G.AutoFarmCheck then
+						_G.AutoFarm = false
+					end
+					if _G.AutoHatchEggCheck then
+						_G.AutoHatchEgg = false
+					end
+    
+                        -- ✅ โหลดลำดับ Challenge ใหม่ทุกครั้ง
+					local challengeOrder = GetChallengePriorityList()
+					wait(0.5)
+					for _, challenge in ipairs(GetChallengePriorityList()) do
+						if not _G.ChallengeRunning then
+							break
+						end
+    
+                            -- print("🚀 กำลังตรวจสอบ " .. challenge.name .. " Challenge...")
+						local player = game:GetService("Players").LocalPlayer
+						local humanoidRoot = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+    
+                            -- ✅ วาร์ปไปทางเข้า Challenge ก่อนตรวจสอบคูลดาวน์
+						if not IsPlayerInPosition(challenge.position, 5) then
+                                -- print("🚀 วาร์ปไปทางเข้า " .. challenge.name .. " Challenge")
+							humanoidRoot.CFrame = CFrame.new(challenge.position)
+							wait(1)  -- ✅ รอให้โหลด UI
+						end
+    
+                            -- ✅ ตรวจสอบปุ่ม OK คูลดาวน์
+						if player.PlayerGui.UIS.Message.Visible then
+                                -- print("🚨 พบปุ่ม OK → กดปุ่ม OK เพื่อตรวจสอบคูลดาวน์")
+							ClickOkButton()
+							wait(1)  -- ✅ รอให้ UI โหลดใหม่
+							_G[challenge.cooldown] = true -- ✅ ตั้งคูลดาวน์
+							if _G.ChallengeRunningCheck then
+								_G.ChallengeRunning = true
+							end
+                                -- print("🚫 " .. challenge.name .. " Challenge ติดคูลดาวน์ → ข้ามไป Challenge ถัดไป")
+							continue
+						end
+    
+                            -- ✅ ถ้าไม่มีคูลดาวน์ → เข้า Challenge ทันที
+						challenge.func(challenge.name, challenge.position, challenge.cooldown, challenge.autoFlag)
+    
+                            -- ✅ รอให้ Challenge จบ หรือถูกปิด
+						while IsInChallenge() do
+							if not _G.ChallengeRunning then
+								break
+							end
+							wait(1)
+						end
+                            -- ✅ ตั้งค่าคูลดาวน์ให้แน่นอน
+						_G[challenge.cooldown] = true
+    
+                            -- ✅ โหลดลำดับ Challenge ใหม่หลังจากทำเสร็จ
+						challengeOrder = GetChallengePriorityList()
+						break
+					end
+    
+                        -- ✅ รีเซ็ตคูลดาวน์หลังจาก 5 นาที เฉพาะ Challenge ที่เปิดอยู่
+					local allCooldown = true
+					for _, challenge in ipairs(challengeOrder) do
+						if not _G[challenge.cooldown] then
+							allCooldown = false
+							break
+						end
+					end
+					if allCooldown then
+                            -- print("🚜 Challenge ที่เปิดอยู่ติดคูลดาวน์ → ว่าง 5 นาที ไปทำสิ่งอื่นๆที่เปิดไว้")
+						if _G.AutoFarmCheck then
+							_G.AutoFarm = true
+						end
+						if _G.AutoHatchEggCheck then
+							_G.AutoHatchEgg = true
+						end
+						wait(300) -- ✅ รอ 5 นาที
+                            -- print("🔄 [DEBUG] รีเซ็ตคูลดาวน์ Challenge ที่เปิดอยู่...")
+    
+                            -- ✅ รีโหลดลำดับ Challenge ใหม่
+						challengeOrder = GetChallengePriorityList()
+    
+                            -- ✅ รีเซ็ตคูลดาวน์ทีละตัว ไม่ต้องอิง `challengeOrder`
+						_G.HardCooldown = false
+						_G.NormalCooldown = false
+						_G.EasyCooldown = false
+    
+                            -- print("✅ [DEBUG] รีเซ็ตคูลดาวน์สำเร็จ: HardCooldown =", _G.HardCooldown, " NormalCooldown =", _G.NormalCooldown, " EasyCooldown =", _G.EasyCooldown)
+					end
+				end
+				wait(0.1)
+			end
+		end)
+            -- ✅ UI Toggle
+		local Challengesm = Tabs.Main:AddSection("Challenge Function")
+		Challengesm:AddToggle("MyToggle_AutoChallengeEasy", {
+			Title = "Auto Challenge Easy",
+			Default = false
+		}):OnChanged(function(value)
+			_G.AutoJoinCLEasy = value
+		end)
+		Challengesm:AddToggle("MyToggle_AutoChallengeNormal", {
+			Title = "Auto Challenge Normal",
+			Default = false
+		}):OnChanged(function(value)
+			_G.AutoJoinCLNormal = value
+		end)
+		Challengesm:AddToggle("MyToggle_AutoChallengeHard", {
+			Title = "Auto Challenge Hard",
+			Default = false
+		}):OnChanged(function(value)
+			_G.AutoJoinCLHard = value
+		end)
+		local Toggle_StartChallenge = Challengesm:AddToggle("MyToggle_StartChallenge", {
+			Title = "Start Challenge",
+			Default = false
+		})
+		Toggle_StartChallenge:OnChanged(function(value)
+			_G.ChallengeRunning = value
+			_G.ChallengeRunningCheck = value
+		end)
+
+        -- ============================= Auto Challenge ========================================
+
+        -- ============================= CraftPet ========================================
+		local CraftFN = Tabs.pet_avatar:AddSection("Pet Function")
+		spawn(function()
+			while true do
+				wait(1.25)
+				if _G.AutoCraftPet then
+					local player = game:GetService("Players").LocalPlayer
+					local petInventory = player:WaitForChild("PlayerGui"):WaitForChild("UIS"):WaitForChild("PetInventory")
+					local petContent = petInventory:WaitForChild("Content"):WaitForChild("Pets"):WaitForChild("Pets")
+            
+                        -- ✅ คราฟ Basic → Gold ก่อน แล้วค่อยคราฟ Gold → Rainbow
+					local primaryLevels = {
+						"Common",
+						"Uncommon",
+						"Rare",
+						"Epic",
+						"Legendary",
+						"Mythical"
+					}
+					local secondaryLevels = {
+						"Common",
+						"Uncommon",
+						"Rare",
+						"Epic",
+						"Legendary",
+						"Mythical"
+					} -- ✅ ใช้ระดับหายากจริงๆ ของ Gold
+            
+                        -- ✅ ฟังก์ชันแยกสัตว์เลี้ยงตามประเภท
+					local function GetPetsByTypeAndRarity()
+						local petGroups = {}
+						for _, pet in ipairs(petContent:GetChildren()) do
+							if pet:IsA("TextButton") then
+								local petId = pet:GetAttribute("id")
+								local petType = pet:GetAttribute("Type")
+								local petRarity = pet:GetAttribute("Rarity")
+								local petLocked = pet:GetAttribute("Locked")
+								if petId and petType and petRarity and petLocked == false then
+									local key = petType .. "_" .. petRarity -- เช่น "Basic_Common" หรือ "Gold_Common"
+									if not petGroups[key] then
+										petGroups[key] = {}
+									end
+									table.insert(petGroups[key], petId) -- เพิ่ม ID เข้าไปในกลุ่มของมัน
+								end
+							end
+						end
+						return petGroups
+					end
+            
+                        -- ✅ ฟังก์ชันสุ่มเลือกสัตว์เลี้ยง 5 ตัว
+					local function SelectPetsForCrafting(petList)
+						if #petList >= 5 then
+							local selectedPets = {}
+            
+                                -- ✅ สุ่มเลือก 5 ตัวแบบไม่ซ้ำ
+							local tempList = {
+								unpack(petList)
+							}
+							for i = 1, 5 do
+								local randomIndex = math.random(1, #tempList)
+								local randomPet = table.remove(tempList, randomIndex)
+								table.insert(selectedPets, randomPet)
+							end
+							return selectedPets
+						end
+						return nil
+					end
+            
+                        -- ✅ ฟังก์ชันคราฟสัตว์เลี้ยง
+					local function AutoCraftPets()
+						local hasCrafted = false
+						while _G.AutoCraftPet do  -- ✅ วนลูปจนกว่าผู้ใช้จะปิดฟังก์ชัน
+							local petGroups = GetPetsByTypeAndRarity()
+            
+                                -- ✅ **ขั้นตอนที่ 1: คราฟจาก Basic → Gold ก่อน**
+							for _, rarity in ipairs(primaryLevels) do
+								for petType, petList in pairs(petGroups) do
+									if petType:find("Basic_" .. rarity) then
+										local selectedPets = SelectPetsForCrafting(petList)
+										if selectedPets then
+											local args = {
+												[1] = selectedPets,
+												[2] = "Gold"
+											}
+            
+                                                -- ✅ ส่งคำขอไปยังเซิร์ฟเวอร์
+											local success, err = pcall(function()
+												game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("CRAFT"):InvokeServer(unpack(args))
+											end)
+											if success then
+												hasCrafted = true
+                                                    -- print("✅ คราฟสำเร็จ! 🏆 ประเภท:", petType, "| Rarity:", rarity, "| เป้าหมาย: Gold")
+                                                -- else
+                                                --     warn("⚠️ มีข้อผิดพลาดขณะคราฟ:", err)
+											end
+										end
+									end
+								end
+							end
+            
+                                -- ✅ **ขั้นตอนที่ 2: ถ้า Basic ไม่พอ → คราฟจาก Gold → Rainbow**
+							if not hasCrafted then
+								for _, rarity in ipairs(secondaryLevels) do
+									for petType, petList in pairs(petGroups) do
+										if petType:find("Gold") and petType:find(rarity) then -- ✅ ใช้ "Gold" + rarity
+											local selectedPets = SelectPetsForCrafting(petList)
+											if selectedPets then
+												local args = {
+													[1] = selectedPets,
+													[2] = "Rainbow"
+												}
+            
+                                                    -- ✅ ส่งคำขอไปยังเซิร์ฟเวอร์
+												local success, err = pcall(function()
+													game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("CRAFT"):InvokeServer(unpack(args))
+												end)
+												if success then
+													hasCrafted = true
+                                                        -- print("✅ คราฟสำเร็จ! 🏆 ประเภท:", petType, "| Rarity:", rarity, "| เป้าหมาย: Rainbow")
+                                                    -- else
+                                                    --     warn("⚠️ มีข้อผิดพลาดขณะคราฟ:", err)
+												end
+											end
+										end
+									end
+								end
+							end
+            
+                                -- ✅ อัปเดตรายการสัตว์เลี้ยงใหม่หลังจากคราฟ
+							if hasCrafted then
+								wait(1) -- ✅ รอ 1 วินาทีเพื่ออัปเดตข้อมูลใหม่
+								hasCrafted = false
+							else
+								wait(2) -- ✅ ถ้าไม่มีอะไรให้คราฟ รอ 2 วินาทีเพื่อลดภาระ
+							end
+						end
+					end
+            
+                        -- ✅ เรียกใช้งาน AutoCraftPets() เมื่อผู้ใช้เปิดใช้งานฟังก์ชัน
+					AutoCraftPets()
+				else
+					wait(1) -- ✅ ถ้าฟังก์ชันปิดอยู่ รอ 1 วินาที เพื่อลดภาระ
+				end
+			end
+		end)
+		local Toggle_AutoCraftPet = CraftFN:AddToggle("Toggle_AutoCraftPet", {
+			Title = "Auto Craft Pet",
+			Default = false
+		})
+		Toggle_AutoCraftPet:OnChanged(function()
+			_G.AutoCraftPet = Toggle_AutoCraftPet.Value
+		end)
+		Toggle_AutoCraftPet:SetValue(false) -- ค่าเริ่มต้นปิด
+		local AvatarFN = Tabs.pet_avatar:AddSection("Avatars Function")
+
+            -- ✅ สร้าง Paragraph2 สำหรับแสดงสถานะ
+		local myParagraph = AvatarFN:AddParagraph({
+			Title = "Convert Avatars to Crystal",
+			Content = "🔷DENGHUB | Name : DENGHUB | Converted: 0/0"
+		})
+
+            -- ✅ ฟังก์ชัน Convert Crystals พร้อมอัปเดตสถานะ
+		function ConvertCrystals()
+			local player = game:GetService("Players").LocalPlayer
+			local avatarHolder = player.PlayerGui.UIS.Ascension.Convert.HOLDER:FindFirstChild("Avatars")
+			if not avatarHolder then
+				myParagraph:SetDesc("❌ Not Avatars")
+				return
+			end
+			local convertedCount = 0
+			local totalAvatars = 0
+            
+                -- ✅ นับจำนวน Avatar ที่ตรงเงื่อนไข
+			for _, avatar in ipairs(avatarHolder:GetChildren()) do
+				if avatar:IsA("TextButton") then
+					local Type = avatar:GetAttribute("Type") or "Unknown"
+					local Rarity = avatar:GetAttribute("Rarity") or "Unknown"
+					local Crystals = avatar:GetAttribute("Crystals") or 0
+					local Locked = avatar:GetAttribute("Locked") or false
+            
+                        -- ✅ ตรวจสอบว่า Avatar นี้ตรงเงื่อนไขหรือไม่
+					if Type == "Basic" and Rarity == "Mythical" and Crystals == 4 and Locked == false then
+						totalAvatars = totalAvatars + 1
+					end
+				end
+			end
+            
+                -- ✅ ถ้าไม่มี Avatar ที่ตรงเงื่อนไข -> แจ้งเตือนและจบการทำงาน
+			if totalAvatars == 0 then
+				myParagraph:SetDesc("❌ No eligible Avatars found for conversion!")
+				return
+			end
+            
+                -- ✅ เริ่ม Convert เฉพาะ Avatar ที่ตรงเงื่อนไข
+			for _, avatar in ipairs(avatarHolder:GetChildren()) do
+				if avatar:IsA("TextButton") then
+					local id = avatar:GetAttribute("id")
+					local AvatarName = avatar.Name
+					local Type = avatar:GetAttribute("Type") or "Unknown"
+					local Rarity = avatar:GetAttribute("Rarity") or "Unknown"
+					local Crystals = avatar:GetAttribute("Crystals") or 0
+					local Locked = avatar:GetAttribute("Locked") or false
+            
+                        -- ✅ Convert เฉพาะที่ตรงเงื่อนไข
+					if Type == "Basic" and Rarity == "Mythical" and Crystals == 4 and Locked == false then
+						local args = {
+							[1] = {
+								[1] = id
+							}
+						}
+						game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("ASCENSION_CONVERSION"):FireServer(unpack(args))
+						convertedCount = convertedCount + 1
+						myParagraph:SetDesc(string.format("✅ Conversion Successful | Name: %s | Converted: %d/%d", AvatarName, convertedCount, totalAvatars))
+            
+                            -- ✅ รอ 0.5 วินาทีป้องกันการส่งคำขอถี่เกินไป
+						wait(1)
+					end
+				end
+			end
+            
+                -- ✅ อัปเดตข้อความสรุปผล
+			myParagraph:SetDesc(string.format("✅ Conversion Complete! Total converted: %d/%d items", convertedCount, totalAvatars))
+		end
+		AvatarFN:AddButton({
+			Title = "Avatars Convert to Crystal",
+			Description = "Click here to Convert Avatars to Crystal",
+			Callback = function()
+				ConvertCrystals()
+			end
+		})
+        -- ============================= CraftPet ========================================
+
+        -- =============================  Mic  ========================================
+		local ClaimFN = Tabs.Misc:AddSection("Claim Function")
+		_G.AutoClaimRewards = false  -- ค่าเริ่มต้นปิดใช้งาน
+		function ClaimAllRewards()
+			spawn(function()
+				while _G.AutoClaimRewards do  -- ทำงานต่อเนื่องจนกว่าจะปิด
+					for i = 1, 12 do  -- วนลูปเคลมรางวัลทั้ง 12 กล่อง
+						if not _G.AutoClaimRewards then
+							break
+						end -- หยุดทำงานถ้าถูกปิด
+						local args = {
+							[1] = i
+						}
+						game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("CLAIM_REWARD"):FireServer(unpack(args))
+						wait(0.23)  -- หน่วงเวลา 1 วินาทีต่อกล่อง
+					end
+					wait(3)  -- รอ 10 วินาทีแล้ววนใหม่
+				end
+			end)
+		end
+            -- 🔘 เพิ่ม Toggle ใน GUI
+		local Toggle_AutoClaim = ClaimFN:AddToggle("MyToggle_AutoClaim", {
+			Title = "Auto Claim Rewards",
+			Default = false
+		})
+		Toggle_AutoClaim:OnChanged(function()
+			_G.AutoClaimRewards = Toggle_AutoClaim.Value
+			if _G.AutoClaimRewards then
+				ClaimAllRewards()  -- เริ่มทำงานเมื่อเปิดใช้งาน
+			end
+		end)
+		Options.MyToggle_AutoClaim:SetValue(false) -- ค่าเริ่มต้นปิด
+		_G.AutoClaimSecretDoor = false  -- ค่าเริ่มต้นปิดใช้งาน
+		function ClaimSecretDoor()
+			spawn(function()
+				while _G.AutoClaimSecretDoor do  -- ทำงานต่อเนื่องจนกว่าจะปิด
+					for i = 1, 6 do  -- วนลูปเคลมรางวัลทั้ง 12 กล่อง
+						if not _G.AutoClaimSecretDoor then
+							break
+						end -- หยุดทำงานถ้าถูกปิด
+						local args = {
+							[1] = "SECRET_DOOR_" .. i
+						}
+						game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("ChestClaim"):FireServer(unpack(args))
+						wait(0.25)  -- หน่วงเวลา 1 วินาทีต่อกล่อง
+					end
+					wait(3)  -- รอ 10 วินาทีแล้ววนใหม่
+				end
+			end)
+		end
+            -- 🔘 เพิ่ม Toggle ใน GUI
+		local Toggle_AutoClaimSecretDoor = ClaimFN:AddToggle("MyToggle_AutoClaimSecretDoor", {
+			Title = "Auto Claim SecretDoor",
+			Default = false
+		})
+		Toggle_AutoClaimSecretDoor:OnChanged(function()
+			_G.AutoClaimSecretDoor = Toggle_AutoClaim.Value
+			if _G.AutoClaimSecretDoor then
+				ClaimSecretDoor()  -- เริ่มทำงานเมื่อเปิดใช้งาน
+			end
+		end)
+		Options.MyToggle_AutoClaimSecretDoor:SetValue(false) -- ค่าเริ่มต้นปิด
+		_G.AutoChestBox = false  -- ค่าเริ่มต้นปิดใช้งาน
+		function ClaimChestBox()
+			spawn(function()
+				while _G.AutoChestBox do  -- ทำงานต่อเนื่องจนกว่าจะปิด
+                        -- Claim other rewards
+					local rewards = {
+						"DailyReward",
+						"GroupReward",
+						"PremiumReward",
+						"VipReward"
+					}
+					for _, reward in ipairs(rewards) do
+						if not _G.AutoChestBox then
+							return
+						end
+						game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("ChestClaim"):FireServer(reward)
+						wait(0.25)
+					end
+					wait(3)  -- รอ 10 วินาทีแล้ววนใหม่
+				end
+			end)
+		end
+            -- 🔘 เพิ่ม Toggle ใน GUI
+		local Toggle_AutoChestBox = ClaimFN:AddToggle("MyToggle_Toggle_AutoChestBox", {
+			Title = "Auto ChestBox",
+			Default = false
+		})
+		Toggle_AutoChestBox:OnChanged(function()
+			_G.AutoChestBox = Toggle_AutoClaim.Value
+			if _G.AutoChestBox then
+				ClaimChestBox()  -- เริ่มทำงานเมื่อเปิดใช้งาน
+			end
+		end)
+		Options.MyToggle_Toggle_AutoChestBox:SetValue(false) -- ค่าเริ่มต้นปิด
+		_G.AutoSpinWheel = false  -- ค่าเริ่มต้นปิดใช้งาน
+		function SpinWheel()
+			spawn(function()
+				while _G.AutoSpinWheel do  -- ทำงานต่อเนื่องจนกว่าจะปิด
+					local args = {
+						[1] = "SpinWheel"
+					}
+					game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("SPIN_WHEEL"):InvokeServer(unpack(args))
+					wait(1)  -- รอ 10 วินาทีแล้ววนใหม่
+				end
+			end)
+		end
+            -- 🔘 เพิ่ม Toggle ใน GUI
+		local Toggle_AutoSpinWheel = ClaimFN:AddToggle("MyToggle_AutoSpinWheel", {
+			Title = "Auto SpinWheel",
+			Default = false
+		})
+		Toggle_AutoSpinWheel:OnChanged(function()
+			_G.AutoSpinWheel = Toggle_AutoSpinWheel.Value
+			if _G.AutoSpinWheel then
+				SpinWheel()  -- เริ่มทำงานเมื่อเปิดใช้งาน
+			end
+		end)
+		Options.MyToggle_AutoSpinWheel:SetValue(false) -- ค่าเริ่มต้นปิด
+        -- =============================  Mic  ========================================
+
+
+    -- ============================================= Other Code End =================================
+
+    -- ====================================  Tools  ====================================
+		local Tools_Option = Tabs.Tools:AddSection("Option")
+		Tools_Option:AddButton({
+			Title = "White Screen Enabled ✅",
+            -- Description = "Click here to Teleport the map.",
+			Callback = function()
+				game:GetService("RunService"):Set3dRenderingEnabled(false)
+			end
+		})
+		Tools_Option:AddButton({
+			Title = "White Screen Disabled ❌",
+            -- Description = "Click here to Teleport the map.",
+			Callback = function()
+				game:GetService("RunService"):Set3dRenderingEnabled(true)
+			end
+		})
+		Tools_Option:AddButton({
+			Title = "Low VFX",
+			Callback = function()
+				workspace:FindFirstChildOfClass('Terrain').WaterWaveSize = 0
+				workspace:FindFirstChildOfClass('Terrain').WaterWaveSpeed = 0
+				workspace:FindFirstChildOfClass('Terrain').WaterReflectance = 0
+				workspace:FindFirstChildOfClass('Terrain').WaterTransparency = 0
+				game:GetService("Lighting").GlobalShadows = false
+				game:GetService("Lighting").FogEnd = 9e9
+				settings().Rendering.QualityLevel = 1
+				for i, v in pairs(workspace:GetDescendants()) do
+					if v:IsA("Part") or v:IsA("UnionOperation") or v:IsA("MeshPart") or v:IsA("CornerWedgePart") or v:IsA("TrussPart") then
+						v.Material = "Plastic"
+						v.Reflectance = 0
+					elseif v:IsA("Decal") then
+						v.Transparency = 1
+					elseif v:IsA("ParticleEmitter") or v:IsA("Trail") then
+						v.Lifetime = NumberRange.new(0)
+					elseif v:IsA("Explosion") then
+						v.BlastPressure = 1
+						v.BlastRadius = 1
+					end
+				end
+				for i, v in pairs(game:GetService("Lighting"):GetDescendants()) do
+					if v:IsA("BlurEffect") or v:IsA("SunRaysEffect") or v:IsA("ColorCorrectionEffect") or v:IsA("BloomEffect") or v:IsA("DepthOfFieldEffect") then
+						v.Enabled = false
+					end
+				end
+			end
+		})
+		Tools_Option:AddButton({
+			Title = "BoostFPS",
+			Callback = function()
+				local ToDisable = {
+					Textures = true,
+					VisualEffects = true,
+					Parts = true,
+					Particles = true,
+					Sky = true
+				}
+				local ToEnable = {
+					FullBright = false
+				}
+				local Stuff = {}
+				for _, v in next, game:GetDescendants() do
+					if ToDisable.Parts then
+						if v:IsA("Part") or v:IsA("Union") or v:IsA("BasePart") then
+							v.Material = Enum.Material.SmoothPlastic
+							table.insert(Stuff, 1, v)
+						end
+					end
+					if ToDisable.Particles then
+						if v:IsA("ParticleEmitter") or v:IsA("Smoke") or v:IsA("Explosion") or v:IsA("Sparkles") or v:IsA("Fire") then
+							v.Enabled = false
+							table.insert(Stuff, 1, v)
+						end
+					end
+					if ToDisable.VisualEffects then
+						if v:IsA("BloomEffect") or v:IsA("BlurEffect") or v:IsA("DepthOfFieldEffect") or v:IsA("SunRaysEffect") then
+							v.Enabled = false
+							table.insert(Stuff, 1, v)
+						end
+					end
+					if ToDisable.Textures then
+						if v:IsA("Decal") or v:IsA("Texture") then
+							v.Texture = ""
+							table.insert(Stuff, 1, v)
+						end
+					end
+					if ToDisable.Sky then
+						if v:IsA("Sky") then
+							v.Parent = nil
+							table.insert(Stuff, 1, v)
+						end
+					end
+				end
+				game:GetService("TestService"):Message("Effects Disabler Script : Successfully disabled " .. #Stuff .. " assets / effects. Settings :")
+				for i, v in next, ToDisable do
+					print(tostring(i) .. ": " .. tostring(v))
+				end
+				if ToEnable.FullBright then
+					local Lighting = game:GetService("Lighting")
+					Lighting.FogColor = Color3.fromRGB(255, 255, 255)
+					Lighting.FogEnd = math.huge
+					Lighting.FogStart = math.huge
+					Lighting.Ambient = Color3.fromRGB(255, 255, 255)
+					Lighting.Brightness = 5
+					Lighting.ColorShift_Bottom = Color3.fromRGB(255, 255, 255)
+					Lighting.ColorShift_Top = Color3.fromRGB(255, 255, 255)
+					Lighting.OutdoorAmbient = Color3.fromRGB(255, 255, 255)
+					Lighting.Outlines = true
+				end
+			end
+		})
+		local Tools_Tools = Tabs.Tools:AddSection("Tools")
+		Tools_Tools:AddButton({
+			Title = "Copy Position",
+			Callback = function()
+				setclipboard(tostring(game.Players.LocalPlayer.Character.HumanoidRootPart.Position))
+			end
+		})
+		local Tools_Addon = Tabs.Tools:AddSection("Addon")
+		Tools_Addon:AddButton({
+			Title = "Rejoin",
+            -- Description = "Click here to Teleport the map.",
+			Callback = function()
+				local ts = game:GetService("TeleportService")
+				local p = game.Players.LocalPlayer
+				ts:Teleport(game.PlaceId, p)
+			end
+		})
+		Tools_Addon:AddButton({
+			Title = "Hop Server",
+            -- Description = "Click here to Teleport the map.",
+			Callback = function()
+				local PlaceID = game.PlaceId
+				local AllIDs = {}
+				local foundAnything = ""
+				local actualHour = os.date("!*t").hour
+				local Deleted = false
+				function TPReturner()
+					local Site;
+					if foundAnything == "" then
+						Site = game.HttpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. PlaceID .. '/servers/Public?sortOrder=Asc&limit=100'))
+					else
+						Site = game.HttpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. PlaceID .. '/servers/Public?sortOrder=Asc&limit=100&cursor=' .. foundAnything))
+					end
+					local ID = ""
+					if Site.nextPageCursor and Site.nextPageCursor ~= "null" and Site.nextPageCursor ~= nil then
+						foundAnything = Site.nextPageCursor
+					end
+					local num = 0;
+					for i, v in pairs(Site.data) do
+						local Possible = true
+						ID = tostring(v.id)
+						if tonumber(v.maxPlayers) > tonumber(v.playing) then
+							for _, Existing in pairs(AllIDs) do
+								if num ~= 0 then
+									if ID == tostring(Existing) then
+										Possible = false
+									end
+								else
+									if tonumber(actualHour) ~= tonumber(Existing) then
+										local delFile = pcall(function()
+											delfile("NotSameServers.json")
+											AllIDs = {}
+											table.insert(AllIDs, actualHour)
+										end)
+									end
+								end
+								num = num + 1
+							end
+							if Possible == true then
+								table.insert(AllIDs, ID)
+								wait()
+								pcall(function()
+									writefile("NotSameServers.json", game:GetService('HttpService'):JSONEncode(AllIDs))
+									wait()
+									game:GetService("TeleportService"):TeleportToPlaceInstance(PlaceID, ID, game.Players.LocalPlayer)
+								end)
+								wait(4)
+							end
+						end
+					end
+				end
+				function Teleport()
+					while wait() do
+						pcall(function()
+							TPReturner()
+							if foundAnything ~= "" then
+								TPReturner()
+							end
+						end)
+					end
+				end
+				Teleport()
+			end
+		})
+		Tools_Addon:AddButton({
+			Title = "Copy JobID",
+            -- Description = "Click here to Teleport the map.",
+			Callback = function()
+				setclipboard(game.JobId)
+			end
+		})
+		local InputJobID = Tools_Addon:AddInput("InputJobID", {
+			Title = "JobID",
+			Default = "",
+			Numeric = false, -- Only allows numbers
+			Finished = true, -- Only calls callback when you press enter
+			Callback = function(Value)
+				JobIdInput = Value
+			end
+		})
+		Tools_Addon:AddButton({
+			Title = "Copy JobID",
+			Description = "Click here to Join JobID",
+			Callback = function()
+				sgame:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, JobIdInput)
+			end
+		})
+		Tools_Addon:AddButton({
+			Title = "Close UI",
+            -- Description = "Click here to Join JobID",
+			Callback = function()
+				Fluent:Destroy()
+			end
+		})
+    -- ====================================  Tools  ====================================
+	end
+	SaveManager:SetLibrary(Fluent)
+	InterfaceManager:SetLibrary(Fluent)
+	SaveManager:IgnoreThemeSettings()
+	SaveManager:SetIgnoreIndexes({})
+	InterfaceManager:SetFolder("DENGHUB2024")
+	SaveManager:SetFolder("DENGHUB2025/Avatar-Fighting-Simulator/" .. game.Players.LocalPlayer.Name .. "")
+	InterfaceManager:BuildInterfaceSection(Tabs.Settings)
+	SaveManager:BuildConfigSection(Tabs.Settings)
+	Window:SelectTab(1)
+
+    
+    --AnitiAFK
+	local vu = game:GetService("VirtualUser")
+	local ViSendMouseButtonEvent = game:service'VirtualInputManager'
+	game:GetService("Players").LocalPlayer.Idled:connect(function()
+		vu:Button2Down(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
+		task.wait(1)
+		vu:Button2Up(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
+	end)
+	coroutine.resume(coroutine.create(function()
+		while task.wait() do
+			pcall(function()
+				ViSendMouseButtonEvent:SendMouseButtonEvent(795, 595, 0, true, game, 1)
+				task.wait(1)
+				ViSendMouseButtonEvent:SendMouseButtonEvent(795, 595, 0, false, game, 1)
+				task.wait(1000)
+			end)
+		end
+	end))
+	game:GetService("Players").LocalPlayer.Idled:connect(function()
+		local Vector = Vector2.new(workspace.CurrentCamera.ViewportSize.X / 2, workspace.CurrentCamera.ViewportSize.Y / 2  - (game:GetService("GuiService"):GetGuiInset().Y / 2))
+		vu:Button1Down(Vector2.new(workspace.CurrentCamera.ViewportSize.X / 2, workspace.CurrentCamera.ViewportSize.Y / 2  - (game:GetService("GuiService"):GetGuiInset().Y / 2)))
+	end)
+	game.Players.LocalPlayer.AttributeChanged:Connect(function(n)
+		if n == "Idle" then
+			game.Players.LocalPlayer:SetAttribute("Idle", false)
+		end
+	end)
+    --AnitiAFK
+	ShowNotification("The script has been loaded.", "")
+    -- You can use the SaveManager:LoadAutoloadConfig() to load a config
+    -- which has been marked to be one that auto loads!
+	SaveManager:LoadAutoloadConfig()
+end
