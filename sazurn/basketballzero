@@ -1,0 +1,168 @@
+local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+				local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
+				local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
+
+				local Window = Fluent:CreateWindow({
+				    Title = "BasketBall Zero" .. Fluent.Version,
+				    SubTitle = "Sazurn Hub",
+				    TabWidth = 160,
+				    Size = UDim2.fromOffset(580, 460),
+				    Acrylic = false,
+				    Theme = "Dark",
+				    MinimizeKey = Enum.KeyCode.G
+				})
+				local Tabs = {
+				    Speed = Window:AddTab({ Title = "Speed Boost", Icon = "rewind" }),
+				    Styles = Window:AddTab({ Title = "Styles", Icon = "flame" }),
+                    Zones = Window:AddTab({ Title = "Zones", Icon = "waves" }),
+				    Stats = Window:AddTab({ Title = "Stats", Icon = "scroll" }),
+				    InStats = Window:AddTab({ Title = "In Game Stats", Icon = "gamepad-2" }),
+				    Settings = Window:AddTab({ Title = "Settings", Icon = "settings" })
+				}
+
+				local styles = { "Clutch", "Playmaker", "Phantom", "Flash", "Star", "Sniper", "Giant", "Ace" }
+
+				for _, styleName in ipairs(styles) do
+				    Tabs.Styles:AddButton({
+				        Title = styleName,
+				        Description = "",
+				        Callback = function()
+				            local player = game:GetService("Players").LocalPlayer
+				            local style = player:FindFirstChild("Style")
+				            if style then
+				                style.Value = styleName
+				            else
+				                style = Instance.new("StringValue")
+				                style.Name = "Style"
+				                style.Parent = player
+				                style.Value = styleName
+				            end
+				        end
+				    })
+				end
+
+                local zones = { "Sprinter", "Hustle", "Lockdown", "Dime", "Limitless", "Quickdraw", "Posterizer", "StreetDribbler", "777" }
+
+                for _, zoneName in ipairs(zones) do
+                    Tabs.Zones:AddButton({
+                        Title = zoneName,
+                          Description = "",
+                          Callback = function()
+                              local player = game:GetService("Players").LocalPlayer
+                              local zone = player:FindFirstChild("Zone")
+                              if zone then
+                                zone.Value = zoneName
+                              else 
+                                zone = Instance.new("StringValue")
+                                 zone.Name = "Zone"
+                                zone.Parent = player
+                                 zone.Value = zoneName
+                             end
+                          end
+                     })
+                end
+
+
+
+				local inMatchFolder = game:GetService("Players").LocalPlayer:FindFirstChild("InMatch")
+				if inMatchFolder then
+				    local stats = { "AnkleBreaks", "Assists", "Blocks", "Dunks", "Matches", "Points", "Points3" }
+				    for _, statName in ipairs(stats) do
+				        local stat = inMatchFolder:FindFirstChild(statName)
+				        local defaultValue = stat and stat.Value or "0"
+				        Tabs.InStats:AddInput(statName, {
+				            Title = statName,
+				            Description = "Input " .. statName,
+				            Default = tostring(defaultValue),
+				            Placeholder = "Enter " .. statName,
+				            Numeric = true,
+				            Finished = false,
+				            Callback = function(Value)
+				                if stat then
+				                    stat.Value = Value
+				                else
+				                    local newStat = Instance.new("StringValue")
+				                    newStat.Name = statName
+				                    newStat.Parent = inMatchFolder
+				                    newStat.Value = Value
+				                end
+				            end
+				        })
+				    end
+				end
+
+				local statsFrame = game:GetService("Players").LocalPlayer.PlayerGui.Stats.BG.Content
+				local stats = { "AnkleBreaks", "Assists", "Blocks", "Dunks", "MVP", "Matches", "Points", "Points3" }
+				for _, statName in ipairs(stats) do
+				    local statButton = statsFrame:FindFirstChild(statName)
+				    if statButton then
+				        local valueLabel = statButton:FindFirstChild("Value")
+				        local defaultValue = valueLabel and valueLabel.Text or "0"
+				        Tabs.Stats:AddInput(statName, {
+				            Title = statName,
+				            Description = "Input " .. statName,
+				            Default = tostring(defaultValue),
+				            Placeholder = "Enter " .. statName,
+				            Numeric = true,
+				            Finished = false,
+				            Callback = function(Value)
+				                if valueLabel then
+				                    valueLabel.Text = Value
+				                end
+				            end
+				        })
+				    end
+				end
+
+				local RunService = game:GetService("RunService")
+				local Players = game:GetService("Players")
+				local LocalPlayer = Players.LocalPlayer
+
+				local tpWalking = false
+				local moveSpeed = 1
+
+				Tabs.Speed:AddToggle("MyToggle", {
+				    Title = "Toggle", 
+				    Description = "Enable",
+				    Default = false,
+				    Callback = function(state)
+				        tpWalking = state
+				    end
+				})
+
+				Tabs.Speed:AddSlider("Slider", {
+				    Title = "Speed",
+				    Description = "",
+				    Default = 0,
+				    Min = 0,
+				    Max = 20,
+				    Rounding = 1,
+				    Callback = function(Value)
+				        moveSpeed = Value
+				    end
+				})
+
+				RunService.Heartbeat:Connect(function(delta)
+				    if not tpWalking then return end
+				    local character = LocalPlayer.Character
+				    if not character then return end
+				    local humanoid = character:FindFirstChildWhichIsA("Humanoid")
+				    if not humanoid or humanoid.MoveDirection.Magnitude == 0 then return end
+				    character:TranslateBy(humanoid.MoveDirection * moveSpeed * delta * 5)
+				end)
+				SaveManager:SetLibrary(Fluent)
+				InterfaceManager:SetLibrary(Fluent)
+				SaveManager:IgnoreThemeSettings()
+				SaveManager:SetIgnoreIndexes({})
+				InterfaceManager:SetFolder("FluentScriptHub")
+				SaveManager:SetFolder("FluentScriptHub/specific-game")
+				InterfaceManager:BuildInterfaceSection(Tabs.Settings)
+				SaveManager:BuildConfigSection(Tabs.Settings)
+				Window:SelectTab(1)
+				Fluent:Notify({
+				    Title = "Sazurn hub",
+				    Content = "https://discord.gg/hF8B9k8aed",
+				    Duration = 20
+				})
+
+				SaveManager:LoadAutoloadConfig()
